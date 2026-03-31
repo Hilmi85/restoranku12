@@ -8,11 +8,8 @@ use App\Models\Item;
 
 class ItemSeeder extends Seeder
 {
-    /**
-     * Run the database seeds.
-     */
     public function run(): void
     {
-        Item::Factory(10)->create();
+        Item::factory(10)->create();
     }
 }

@@ -8,12 +8,9 @@ use Illuminate\Support\Facades\DB;
 
 class RoleSeeder extends Seeder
 {
-    /**
-     * Run the database seeds.
-     */
     public function run(): void
     {
-        $roles [
+        $roles = [
             ['role_name' => 'admin', 'description' => 'Administrator'],
             ['role_name' => 'cashier', 'description' => 'Kasir'],
             ['role_name' => 'chef', 'description' => 'Koki'],
