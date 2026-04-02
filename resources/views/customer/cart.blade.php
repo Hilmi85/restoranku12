@@ -41,11 +41,11 @@
                             <tr>
                                 <th scope="row">
                                     <div class="d-flex align-items-center">
-                                        <img src="{{ asset('img_item_upload/' . $item['image']) }}"
+                                        <img src="{{ asset('img_item_upload/'. $item['image']) }}"
                                             class="img-fluid me-5 rounded-circle"
                                             style="width: 80px; height: 80px;"
                                             alt=""
-                                            onerror="this.onerror=null; this.src='{{ asset('img_item_upload/' . $item['image']) }}';">
+                                            onerror="this.onerror=null;this.src='{{ $item['image'] }}';">
                                     </div>
                                 </th>
                                 <td>
@@ -57,13 +57,13 @@
                                 <td>
                                     <div class="input-group quantity mt-4" style="width: 100px;">
                                         <div class="input-group-btn">
-                                            <button class="btn btn-sm btn-minus rounded-circle bg-light border" >
+                                            <button class="btn btn-sm btn-minus rounded-circle bg-light border" onclick="updateQuantity({{ $item['id'] }}, -1)">
                                             <i class="fa fa-minus"></i>
                                             </button>
                                         </div>
-                                        <input type="text" class="form-control form-control-sm text-center border-0" value="{{ $item['qty'] }}">
+                                        <input id="qty-{{ $item['id'] }}" type="text" class="form-control form-control-sm text-center border-0" value="{{ $item['qty'] }}" readonly>
                                         <div class="input-group-btn">
-                                            <button class="btn btn-sm btn-plus rounded-circle bg-light border">
+                                            <button class="btn btn-sm btn-plus rounded-circle bg-light border" onclick="updateQuantity({{ $item['id'] }}, 1)">
                                                 <i class="fa fa-plus"></i>
                                             </button>
                                         </div>
@@ -73,7 +73,7 @@
                                     <p class="mb-0 mt-4">{{ 'Rp'. number_format($item['price'] * $item['qty'], 0, ',', '.') }}</p>
                                 </td>
                                 <td>
-                                    <button class="btn btn-md rounded-circle bg-light border mt-4" >
+                                    <button class="btn btn-md rounded-circle bg-light border mt-4" onClick="if(confirm('Remove this item from cart?')) { removeItemFromCart(' {{ $item['id'] }} ')}">
                                         <i class="fa fa-times text-danger"></i>
                                     </button>
                                 </td>
@@ -88,6 +88,10 @@
                     $tax = $subTotal * 0.1;
                     $total = $subTotal + $tax;
                 @endphp
+
+                <div class="d-flex justify-content-end">
+                    <a href="{{ route('cart.clear') }}" class="btn btn-danger" onClick="return confirm('Remove all items from cart?')">Remove All Items</a>
+                </div>
 
                 <div class="row g-4 justify-content-end mt-1">
                     <div class="col-8"></div>
@@ -124,3 +128,70 @@
         </div>
 
 @endsection
+
+@section('script')
+    <script>
+        function updateQuantity(itemId, change) {
+            const qtyInput = document.getElementById('qty-' + itemId);
+            const currentQty = parseInt(qtyInput.value);
+            const newQty = currentQty + change;
+
+            if (newQty <= 0) {
+                if (confirm('Remove this item from cart?')) {
+                    removeItemFromCart(itemId);
+                }
+                return;
+            }
+
+            fetch("{{ route('cart.update') }}", {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-CSRF-TOKEN': '{{ csrf_token() }}',
+                    'Accept': 'application/json'
+                },
+                body: JSON.stringify({
+                    id: itemId,
+                    qty: newQty
+                })
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    qtyInput.value = newQty;
+                    location.reload();
+                } else {
+                    alert(data.message);
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                alert('An error occurred while updating cart.');
+            });
+        }
+
+        function removeItemFromCart(itemId) {
+            fetch("{{ route('cart.remove') }}", {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-CSRF-TOKEN': '{{ csrf_token() }}',
+                },
+                body: JSON.stringify({ id: itemId })
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    location.reload();
+                } else {
+                    alert('Failed to remove item from cart.');
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                alert('An error occurred while removing item from cart.');
+            });
+        }
+    </script>
+@endsection
+
