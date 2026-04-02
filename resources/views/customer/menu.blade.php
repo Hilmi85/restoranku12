@@ -72,17 +72,14 @@
                     'Content-Type': 'application/json',
                     'X-CSRF-TOKEN': '{{ csrf_token() }}'
                 },
-                body: JSON.stringify({
-                    id: menuId
-                })
+                body: JSON.stringify({ id: menuId })
             })
             .then(response => response.json())
             .then(data => {
-                if (data.status === 'success') {
-                    alert(data.message);
-                } else {
-                    alert(data.message);
-                }
+                alert(data.message);
+            })
+            .catch(error => {
+                console.error('Error:', error);
             });
         }
     </script>

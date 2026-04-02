@@ -21,7 +21,7 @@ class MenuController extends Controller
     }
 
     public function cart() {
-        $cart=Session::get('cart');
+        $cart = Session::get('cart');
         return view('customer.cart', compact('cart'));
     }
 
@@ -34,7 +34,7 @@ class MenuController extends Controller
             return response()->json([
                 'status' => 'error',
                 'message' => 'Menu item not found'
-                ], 404);
+                ]);
         }
 
         $cart = Session::get('cart');
