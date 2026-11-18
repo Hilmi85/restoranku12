@@ -135,7 +135,7 @@
                                 </div>
 
                                 <div class="d-flex justify-content-end">
-                                    <button type="submit" class="btn border-secondary py-3 text-uppercase text-primary">Konfirmasi Pesanan</button>
+                                    <button type="button" id="pay-button" class="btn border-secondary py-3 text-uppercase text-primary">Konfirmasi Pesanan</button>
                                 </div>
 
                             </div>
@@ -145,5 +145,71 @@
             </form>
         </div>
     </div>
+
+<script src="https://app.sandbox.midtrans.com/snap/snap.js" data-client-key="{{ env('MIDTRANS_CLIENT_KEY') }}"></script>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        const payButton = document.getElementById('pay-button');
+        const form = document.querySelector('form');
+
+        payButton.addEventListener('click', function (e) {
+            e.preventDefault();
+
+            let paymentMethod = document.querySelector('input[name="payment_method"]:checked');
+
+            if (!paymentMethod) {
+                alert('Choose a payment method to proceed.');
+                return;
+            }
+
+            paymentMethod = paymentMethod.value;
+            let formData = new FormData(form);
+
+            if (paymentMethod === 'tunai') {
+                form.submit();
+            } else {
+                fetch("{{ route('checkout.store') }}", {
+                    method: 'POST',
+                    body: formData,
+                    headers: {
+                        'X-CSRF-TOKEN': '{{ csrf_token() }}',
+                        'Accept': 'application/json',
+                    }
+                })
+                .then(response => response.json())
+                .then(data => {
+                    console.log(data);
+
+                    if (data.snap_token) {
+                        snap.pay(data.snap_token, {
+                            gopayMode: 'qr',
+                            onSuccess: function(result){
+                                window.location.href = "/checkout/success/" + data.order_code;
+                            },
+                            onPending: function(result){
+                                alert("Payment pending. Please complete your payment to confirm the order.");
+                            },
+                            onError: function(result){
+                                console.log(result);
+                                alert("Payment failed. Please try again.");
+                            },
+                            onClose: function(){
+                                alert("Payment popup was closed.");
+                            }
+                        });
+                    } else {
+                        alert(data.message ? data.message : "Unexpected response from server. Please try again.");
+                    }
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                    alert("An error occurred while processing your payment. Please try again.");
+                });
+            }
+
+        });
+    });
+</script>
 
 @endsection
