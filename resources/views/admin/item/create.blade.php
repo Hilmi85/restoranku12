@@ -1,5 +1,5 @@
 @extends('admin.layouts.master')
-@section('title', 'Category')
+@section('title', 'Tambah Menu')
 
 @section('content')
 <div class="page-title">
@@ -21,7 +21,7 @@
 </div>
 <div class="card">
     <div class="card-body">
-        <form class="form" action="{{ route('items.store') }}" enctype="multipart/form-data">
+        <form class="form" method="POST" action="{{ route('items.store') }}" enctype="multipart/form-data">
             @csrf
             <div class="form-body">
                 <div class="row">
@@ -49,7 +49,7 @@
                         </div>
                         <div class="form-group">
                             <label for="image">Gambar</label>
-                            <input type="file" class="form-control" id="image" name="image" accept="image/*" required>
+                            <input type="file" class="form-control" id="image" name="img" accept="image/*" required>
                         </div>
                         <div class="form-group">
                             <label for="is_active">Status</label>

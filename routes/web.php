@@ -33,6 +33,8 @@ Route::get('dashboard', function () {
 })->name('dashboard');
 Route::resource('categories', CategoryController::class);
 Route::resource('items', ItemController::class);
+// Accept a regular browser POST as a fallback if the form's PUT override is absent.
+Route::post('items/{item}', [ItemController::class, 'update'])->name('items.update.post');
 Route::resource('roles', RoleController::class);
 Route::resource('users', UserController::class);
 Route::resource('orders', OrderController::class);
