@@ -1,100 +1,107 @@
 @extends('admin.layouts.master')
-@section('title', 'Category')
+@section('title', 'Roles')
 
 @section('css')
+<link rel="stylesheet" href="{{ asset('assets/admin/extensions/simple-datatables/style.css') }}">
+<link rel="stylesheet" href="{{ asset('assets/admin/compiled/css/table-datatables.css') }}">
+<style>
+    .item-actions {
+        display: inline-flex;
+        align-items: center;
+        gap: 0.5rem;
+        white-space: nowrap;
+    }
 
+    .item-actions .btn {
+        width: 4.5rem;
+        padding: 0.25rem 0.4rem;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        gap: 0.35rem;
+    }
+</style>
 @endsection
 
 @section('content')
-    <div class="page-heading">
-        <h3>Selamat Datang, Admin!</h3>
+<div class="page-heading">
+    <div class="page-title">
+        <div class="row">
+            <div class="col-12 col-md-6 order-md-1 order-last">
+                <h3>Daftar Roles</h3>
+                <p class="text-subtitle text-muted">Berbagai role pilihan</p>
+            </div>
+            <div class="col-12 col-md-6 order-md-2 order-first">
+                <nav aria-label="breadcrumb" class="breadcrumb-header float-start float-lg-end">
+                    <ol class="breadcrumb">
+                        <li class="breadcrumb-item"><a href="{{ route('dashboard') }}">Dashboard</a></li>
+                        <li class="breadcrumb-item active text-info font-bold" aria-current="page">DaftarRoles</li>
+                    </ol>
+                </nav>
+            </div>
+        </div>
     </div>
-    <div class="page-content">
-        <section class="row">
-            <div class="col-12 col-lg-12">
-                <div class="row">
-                    <div class="col-6 col-lg-3 col-md-6">
-                        <div class="card">
-                            <div class="card-body px-4 py-4-5">
-                                <div class="row">
-                                    <div class="col-md-4 col-lg-12 col-xl-12 col-xxl-5 d-flex justify-content-start ">
-                                        <div class="stats-icon purple mb-2">
-                                            <i class="iconly-boldWallet"></i>
-                                        </div>
-                                    </div>
-                                    <div class="col-md-8 col-lg-12 col-xl-12 col-xxl-7">
-                                        <h6 class="text-muted font-semibold">Total Pesanan</h6>
-                                        <h6 class="font-extrabold mb-0">112</h6>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-6 col-lg-3 col-md-6">
-                        <div class="card">
-                            <div class="card-body px-4 py-4-5">
-                                <div class="row">
-                                    <div class="col-md-4 col-lg-12 col-xl-12 col-xxl-5 d-flex justify-content-start ">
-                                        <div class="stats-icon blue">
-                                            <i class="iconly-boldBuy"></i>
-                                        </div>
-                                    </div>
-                                    <div class="col-md-8 col-lg-12 col-xl-12 col-xxl-7">
-                                        <h6 class="text-muted font-semibold">Pesanan Hari Ini</h6>
-                                        <h6 class="font-extrabold mb-0">183.000</h6>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-6 col-lg-3 col-md-6">
-                        <div class="card">
-                            <div class="card-body px-4 py-4-5">
-                                <div class="row">
-                                    <div class="col-md-4 col-lg-12 col-xl-12 col-xxl-5 d-flex justify-content-start ">
-                                        <div class="stats-icon green mb-2">
-                                            <i class="iconly-boldFolder"></i>
-                                        </div>
-                                    </div>
-                                    <div class="col-md-8 col-lg-12 col-xl-12 col-xxl-7">
-                                        <h6 class="text-muted font-semibold">Jumlah Menu</h6>
-                                        <h6 class="font-extrabold mb-0">80.000</h6>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-6 col-lg-3 col-md-6">
-                        <div class="card">
-                            <div class="card-body px-4 py-4-5">
-                                <div class="row">
-                                    <div class="col-md-4 col-lg-12 col-xl-12 col-xxl-5 d-flex justify-content-start ">
-                                        <div class="stats-icon blue mb-2">
-                                            <i class="iconly-boldProfile"></i>
-                                        </div>
-                                    </div>
-                                    <div class="col-md-8 col-lg-12 col-xl-12 col-xxl-7">
-                                        <h6 class="text-muted font-semibold">Jumlah Karyawan</h6>
-                                        <h6 class="font-extrabold mb-0">112</h6>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="row">
-                    <div class="col-12">
-                        <div class="card">
-                            <div class="card-header">
-                                <h4>Grafik Penjualan</h4>
-                            </div>
-                            <div class="card-body">
-                                <div id="chart-profile-visit"></div>
-                            </div>
-                        </div>
-                    </div>
+    <section class="section">
+        <div class="card">
+            <div class="card-header">
+                <div class="card-title order-first">
+                    <a href="{{ route('roles.create') }}" class="btn btn-primary float-start float-lg-end">
+                        <i class="bi bi-plus"></i>
+                        Tambah Role
+                    </a>
                 </div>
             </div>
-        </section>
-    </div>
+            <div class="card-body">
+                @if (session('success'))
+                    <div class="alert alert-success alert-dismissible fade show" role="alert">
+                        <i class="bi bi-check-circle-fill"></i>  {{ session('success') }}
+                        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                    </div>
+                @endif
+
+                <table class="table table-striped" id="table1">
+                    <thead>
+                        <tr>
+                            <th>No</th>
+                            <th>Nama Role</th>
+                            <th>Deskripsi</th>
+                            <th>Aksi</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach ($roles as $role)
+                        <tr>
+                            <td>{{ $loop->iteration }}</td>
+                            <td>{{ $role->role_name }}</td>
+                            <td>{{ Str::limit($role->description, 100) }}</td>
+                            <td>
+                                <div class="item-actions">
+                                    <a href="{{ route('roles.edit', $role->id) }}" class="btn btn-warning btn-sm">
+                                        <i class="bi bi-pencil"></i>
+                                        Edit
+                                    </a>
+                                    <form action="{{ route('roles.destroy', $role->id) }}" method="POST" class="m-0">
+                                        @csrf
+                                        @method('DELETE')
+                                        <button type="submit" class="btn btn-danger btn-sm" onclick="return confirm('Apakah Anda yakin ingin menghapus role ini?')">
+                                            <i class="bi bi-trash"></i>
+                                            Hapus
+                                        </button>
+                                    </form>
+                                </div>
+                            </td>
+                        </tr>
+                        @endforeach
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+    </section>
+</div>
+@endsection
+
+@section('script')
+<script src="{{ asset('assets/admin/extensions/simple-datatables/umd/simple-datatables.js') }}"></script>
+<script src="{{ asset('assets/admin/static/js/pages/simple-datatables.js') }}"></script>
 @endsection

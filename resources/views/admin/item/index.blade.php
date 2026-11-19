@@ -1,5 +1,5 @@
 @extends('admin.layouts.master')
-@section('title', 'Category')
+@section('title', 'Daftar Menu')
 
 @section('css')
 <link rel="stylesheet" href="{{ asset('assets/admin/extensions/simple-datatables/style.css') }}">
@@ -52,6 +52,13 @@
                 </div>
             </div>
             <div class="card-body">
+                @if (session('success'))
+                    <div class="alert alert-success alert-dismissible fade show" role="alert">
+                        <i class="bi bi-check-circle-fill"></i>  {{ session('success') }}
+                        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                    </div>
+                @endif
+
                 <table class="table table-striped" id="table1">
                     <thead>
                         <tr>
