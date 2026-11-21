@@ -3,22 +3,11 @@
 
 @section('css')
 <link rel="stylesheet" href="{{ asset('assets/admin/extensions/simple-datatables/style.css') }}">
-<link rel="stylesheet" href="{{ asset('assets/admin/compiled/css/table-datatables.css') }}">
+<link rel="stylesheet" href="{{ asset('assets/admin/compiled/css/table-datatable.css') }}">
 <style>
-    .item-actions {
-        display: inline-flex;
-        align-items: center;
-        gap: 0.5rem;
-        white-space: nowrap;
-    }
-
-    .item-actions .btn {
-        width: 4.5rem;
-        padding: 0.25rem 0.4rem;
-        display: inline-flex;
-        align-items: center;
-        justify-content: center;
-        gap: 0.35rem;
+    .dataTable-dropdown .dataTable-selector {
+        width: auto !important;
+        min-width: 4rem;
     }
 </style>
 @endsection
@@ -83,8 +72,16 @@
                             <td>{{ Str::limit($item->description, 100) }}</td>
                             <td>{{ 'Rp'. number_format($item->price, 0, ',', '.') }}</td>
                             <td>
-                                <span class="badge {{ $item->category->cat_name == 'Makanan' ? 'bg-warning' : 'bg-info' }}">
-                                    {{ $item->category->cat_name }}
+                                @php
+                                    $categoryName = $item->category?->cat_name;
+                                    $categoryBadgeClass = match ($categoryName) {
+                                        'Makanan' => 'bg-warning text-dark',
+                                        'Minuman' => 'bg-info text-dark',
+                                        default => 'bg-secondary',
+                                    };
+                                @endphp
+                                <span class="badge {{ $categoryBadgeClass }}">
+                                    {{ $categoryName ?? 'Kategori tidak tersedia'}}
                                 </span>
                             </td>
                             <td>
@@ -92,21 +89,23 @@
                                     {{ $item->is_active == 1 ? 'Aktif' : 'Tidak Aktif' }}
                                 </span>
                             </td>
-                            <td>
-                                <div class="item-actions">
-                                    <a href="{{ route('items.edit', $item->id) }}" class="btn btn-warning btn-sm">
-                                        <i class="bi bi-pencil"></i>
-                                        Edit
-                                    </a>
-                                    <form action="{{ route('items.destroy', $item->id) }}" method="POST" class="m-0">
-                                        @csrf
-                                        @method('DELETE')
-                                        <button type="submit" class="btn btn-danger btn-sm" onclick="return confirm('Apakah Anda yakin ingin menghapus item ini?')">
-                                            <i class="bi bi-trash"></i>
-                                            Hapus
-                                        </button>
-                                    </form>
-                                </div>
+                            <td class="text-nowrap">
+                                <a href="{{ route('items.edit', $item->id) }}"
+                                class="badge bg-warning text-dark text-decoration-none">
+                                    <i class="bi bi-pencil"></i> Edit
+                                </a>
+
+                                <form action="{{ route('items.destroy', $item->id) }}"
+                                    method="POST"
+                                    class="d-inline m-0"
+                                    onsubmit="return confirm('Apakah Anda yakin ingin menghapus item ini?')">
+                                    @csrf
+                                    @method('DELETE')
+
+                                    <button type="submit" class="badge bg-danger border-0" style="cursor: pointer">
+                                        <i class="bi bi-trash"></i> Hapus
+                                    </button>
+                                </form>
                             </td>
                         </tr>
                         @endforeach

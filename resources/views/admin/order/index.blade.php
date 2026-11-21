@@ -1,100 +1,115 @@
 @extends('admin.layouts.master')
-@section('title', 'Category')
+@section('title', 'Daftar Pesanan')
 
 @section('css')
-
+<link rel="stylesheet" href="{{ asset('assets/admin/extensions/simple-datatables/style.css') }}">
+<link rel="stylesheet" href="{{ asset('assets/admin/compiled/css/table-datatable.css') }}">
+<style>
+    .dataTable-dropdown .dataTable-selector {
+        width: auto !important;
+        min-width: 4rem;
+    }
+</style>
 @endsection
 
 @section('content')
-    <div class="page-heading">
-        <h3>Selamat Datang, Admin!</h3>
-    </div>
-    <div class="page-content">
-        <section class="row">
-            <div class="col-12 col-lg-12">
-                <div class="row">
-                    <div class="col-6 col-lg-3 col-md-6">
-                        <div class="card">
-                            <div class="card-body px-4 py-4-5">
-                                <div class="row">
-                                    <div class="col-md-4 col-lg-12 col-xl-12 col-xxl-5 d-flex justify-content-start ">
-                                        <div class="stats-icon purple mb-2">
-                                            <i class="iconly-boldWallet"></i>
-                                        </div>
-                                    </div>
-                                    <div class="col-md-8 col-lg-12 col-xl-12 col-xxl-7">
-                                        <h6 class="text-muted font-semibold">Total Pesanan</h6>
-                                        <h6 class="font-extrabold mb-0">112</h6>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-6 col-lg-3 col-md-6">
-                        <div class="card">
-                            <div class="card-body px-4 py-4-5">
-                                <div class="row">
-                                    <div class="col-md-4 col-lg-12 col-xl-12 col-xxl-5 d-flex justify-content-start ">
-                                        <div class="stats-icon blue">
-                                            <i class="iconly-boldBuy"></i>
-                                        </div>
-                                    </div>
-                                    <div class="col-md-8 col-lg-12 col-xl-12 col-xxl-7">
-                                        <h6 class="text-muted font-semibold">Pesanan Hari Ini</h6>
-                                        <h6 class="font-extrabold mb-0">183.000</h6>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-6 col-lg-3 col-md-6">
-                        <div class="card">
-                            <div class="card-body px-4 py-4-5">
-                                <div class="row">
-                                    <div class="col-md-4 col-lg-12 col-xl-12 col-xxl-5 d-flex justify-content-start ">
-                                        <div class="stats-icon green mb-2">
-                                            <i class="iconly-boldFolder"></i>
-                                        </div>
-                                    </div>
-                                    <div class="col-md-8 col-lg-12 col-xl-12 col-xxl-7">
-                                        <h6 class="text-muted font-semibold">Jumlah Menu</h6>
-                                        <h6 class="font-extrabold mb-0">80.000</h6>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-6 col-lg-3 col-md-6">
-                        <div class="card">
-                            <div class="card-body px-4 py-4-5">
-                                <div class="row">
-                                    <div class="col-md-4 col-lg-12 col-xl-12 col-xxl-5 d-flex justify-content-start ">
-                                        <div class="stats-icon blue mb-2">
-                                            <i class="iconly-boldProfile"></i>
-                                        </div>
-                                    </div>
-                                    <div class="col-md-8 col-lg-12 col-xl-12 col-xxl-7">
-                                        <h6 class="text-muted font-semibold">Jumlah Karyawan</h6>
-                                        <h6 class="font-extrabold mb-0">112</h6>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="row">
-                    <div class="col-12">
-                        <div class="card">
-                            <div class="card-header">
-                                <h4>Grafik Penjualan</h4>
-                            </div>
-                            <div class="card-body">
-                                <div id="chart-profile-visit"></div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
+<div class="page-heading">
+    <div class="page-title">
+        <div class="row">
+            <div class="col-12 col-md-6 order-md-1 order-last">
+                <h3>Daftar Pesanan</h3>
+                <p class="text-subtitle text-muted">Berbagai pesanan yang masuk</p>
             </div>
-        </section>
+            <div class="col-12 col-md-6 order-md-2 order-first">
+                <nav aria-label="breadcrumb" class="breadcrumb-header float-start float-lg-end">
+                    <ol class="breadcrumb">
+                        <li class="breadcrumb-item"><a href="{{ route('dashboard') }}">Dashboard</a></li>
+                        <li class="breadcrumb-item active text-info font-bold" aria-current="page">DaftarMenu</li>
+                    </ol>
+                </nav>
+            </div>
+        </div>
     </div>
+    <section class="section">
+        <div class="card">
+            <div class="card-header">
+                {{-- <div class="card-title order-first">
+                    <a href="{{ route('items.create') }}" class="btn btn-primary float-start float-lg-end">
+                        <i class="bi bi-plus"></i>
+                        Tambah Menu
+                    </a>
+                </div> --}}
+            </div>
+            <div class="card-body">
+                {{-- @if (session('success'))
+                    <div class="alert alert-success alert-dismissible fade show" role="alert">
+                        <i class="bi bi-check-circle-fill"></i>  {{ session('success') }}
+                        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                    </div>
+                @endif --}}
+
+                <table class="table table-striped" id="table1">
+                    <thead>
+                        <tr>
+                            <th>No</th>
+                            <th>Kode Pesanan</th>
+                            <th>Nama Pelanggan</th>
+                            <th>Total</th>
+                            <th>Status</th>
+                            <th>No. Meja</th>
+                            <th>Metode Pembayaran</th>
+                            <th>Catatan</th>
+                            <th>Dibuat Pada</th>
+                            <th>Aksi</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach ($orders as $order)
+                        <tr>
+                            <td>{{ $loop->iteration }}</td>
+                            <td>{{ $order->order_code ?? $order->order_number ?? '-' }}</td>
+                            <td>{{ $order->user?->fullname ?? '-' }}</td>
+                            <td>Rp {{ number_format((float) $order->grand_total, 0, ',', '.') }}</td>
+                            <td>
+                                @php
+                                    $status = strtolower($order->status ?? '');
+                                    $statusLabel = in_array($status, ['cooked', 'coocked'], true)
+                                        ? 'Cooked'
+                                        : ucfirst($status ?: '-');
+                                    $statusClass = match ($status) {
+                                        'settlement' => 'bg-success',
+                                        'pending' => 'bg-warning text-dark',
+                                        'cooked', 'coocked' => 'bg-info text-dark',
+                                        default => 'bg-secondary',
+                                    };
+                                @endphp
+                                <span class="badge {{ $statusClass }}">
+                                    {{ $statusLabel }}
+                                </span>
+                            </td>
+                            <td>{{ $order->table_number ?? '-' }}</td>
+                            <td>{{ $order->payment_method }}</td>
+                            <td>{{ $order->note ?? $order->note ?? '-' }}</td>
+                            <td>{{ $order->created_at?->format('d/m/Y H:i') ?? '-' }}</td>
+                            <td>        
+                                <span class="badge bg-primary">
+                                    <a href="{{ route('orders.show', $order->id) }}" class="text-white">
+                                        <i class="bi bi-eye"></i> Detail      
+                                    </a>
+                                </span>                       
+                            </td>
+                        </tr>
+                        @endforeach
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+    </section>
+</div>
+@endsection
+
+@section('script')
+<script src="{{ asset('assets/admin/extensions/simple-datatables/umd/simple-datatables.js') }}"></script>
+<script src="{{ asset('assets/admin/static/js/pages/simple-datatables.js') }}"></script>
 @endsection
