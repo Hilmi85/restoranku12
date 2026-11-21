@@ -9,8 +9,8 @@
             <h5 class="text-center mb-2"> Ordered Succesfully!</h5>
             @if ($order->payment_method == 'tunai' && $order->status == 'pending')
                 <p class="text-center"><span class="badge bg-danger">Awaiting your payment</span></p>
-            @elseif ($order->payment_method == 'qris' && $order->status == 'pending')
-                <p class="text-center"><span class="badge bg-danger">Please scan the QR code below to complete your payment.</span></p>
+            {{-- @elseif ($order->payment_method == 'qris' && $order->status == 'pending')
+                <p class="text-center"><span class="badge bg-danger">Please scan the QR code below to complete your payment.</span></p> --}}
             @else
                 <p class="text-center"><span class="badge bg-success">Your order has been confirmed. Thank you for ordering!</span></p>
             @endif

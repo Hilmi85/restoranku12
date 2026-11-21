@@ -41,13 +41,17 @@
                 </div> --}}
             </div>
             <div class="card-body">
-                {{-- @if (session('success'))
+                @if (session('success'))
                     <div class="alert alert-success alert-dismissible fade show" role="alert">
-                        <i class="bi bi-check-circle-fill"></i>  {{ session('success') }}
+                        {{ session('success') }}
                         <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
                     </div>
-                @endif --}}
-
+                @endif
+                @if ($errors->any())
+                    <div class="alert alert-danger" role="alert">
+                        {{ $errors->first('status') }}
+                    </div>
+                @endif
                 <table class="table table-striped" id="table1">
                     <thead>
                         <tr>
@@ -60,6 +64,7 @@
                             <th>Metode Pembayaran</th>
                             <th>Catatan</th>
                             <th>Dibuat Pada</th>
+                            <th>Ubah Status</th>
                             <th>Aksi</th>
                         </tr>
                     </thead>
@@ -73,9 +78,12 @@
                             <td>
                                 @php
                                     $status = strtolower($order->status ?? '');
-                                    $statusLabel = in_array($status, ['cooked', 'coocked'], true)
-                                        ? 'Cooked'
-                                        : ucfirst($status ?: '-');
+                                    $statusLabel = match ($status) {
+                                        'settlement' => 'Sudah Dibayar',
+                                        'pending' => 'Belum Dibayar',
+                                        'cooked', 'coocked' => 'Cooked',
+                                        default => ucfirst($status ?: '-'),
+                                    };
                                     $statusClass = match ($status) {
                                         'settlement' => 'bg-success',
                                         'pending' => 'bg-warning text-dark',
@@ -91,6 +99,18 @@
                             <td>{{ $order->payment_method }}</td>
                             <td>{{ $order->note ?? $order->note ?? '-' }}</td>
                             <td>{{ $order->created_at?->format('d/m/Y H:i') ?? '-' }}</td>
+                            <td>
+                                <form action="{{ route('orders.status.update', $order->id) }}" method="POST" class="d-flex gap-2 align-items-center">
+                                    @csrf
+                                    @method('PATCH')
+                                    <select name="status" class="form-select form-select-sm" aria-label="Status pesanan">
+                                        <option value="pending" @selected($order->status === 'pending')>Belum Dibayar</option>
+                                        <option value="settlement" @selected($order->status === 'settlement')>Sudah Dibayar</option>
+                                        <option value="coocked" @selected(in_array($order->status, ['coocked', 'cooked'], true))>Cooked</option>
+                                    </select>
+                                    <button type="submit" class="badge bg-primary border-0" style="cursor: pointer;">Simpan</button>
+                                </form>
+                            </td>
                             <td>        
                                 <span class="badge bg-primary">
                                     <a href="{{ route('orders.show', $order->id) }}" class="text-white">

@@ -24,6 +24,7 @@ Route::get('/cart/clear', [MenuController::class, 'clearCart'])->name('cart.clea
 
 Route::get('/checkout', [MenuController::class, 'checkout'])->name('checkout');
 Route::post('/checkout/store', [MenuController::class, 'storeOrder'])->name('checkout.store');
+Route::post('/checkout/payment/confirm/{orderCode}', [MenuController::class, 'confirmQrPayment'])->name('checkout.payment.confirm');
 Route::get('/checkout/success/{orderId}', [MenuController::class, 'checkoutSuccess'])->name('checkout.success');
 
 
@@ -37,6 +38,7 @@ Route::resource('items', ItemController::class);
 Route::post('items/{item}', [ItemController::class, 'update'])->name('items.update.post');
 Route::resource('roles', RoleController::class);
 Route::resource('users', UserController::class);
+Route::patch('orders/{id}/status', [OrderController::class, 'updateStatus'])->name('orders.status.update');
 Route::resource('orders', OrderController::class);
 
 
