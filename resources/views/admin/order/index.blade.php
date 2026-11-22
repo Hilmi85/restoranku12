@@ -100,7 +100,7 @@
                             <td>{{ $order->note ?? $order->note ?? '-' }}</td>
                             <td>{{ $order->created_at?->format('d/m/Y H:i') ?? '-' }}</td>
                             <td>
-                                <form action="{{ route('orders.status.update', $order->id) }}" method="POST" class="d-flex gap-2 align-items-center">
+                                <form action="{{ route('orders.update', $order->id) }}" method="POST" class="d-flex gap-2 align-items-center">
                                     @csrf
                                     @method('PATCH')
                                     <select name="status" class="form-select form-select-sm" aria-label="Status pesanan">

@@ -93,10 +93,27 @@ class ItemController extends Controller
         return redirect()->route('items.index')->with('success', 'Item updated successfully.');
     }
 
-    public function destroy(string $id) {
-        $item = Item::findOrFail($id);
-        $item->delete();
+    public function updateStatus(Request $request, $id)
+    {
+        $validated = $request->validate([
+            'is_active' => 'required|boolean',
+        ]);
 
-        return redirect()->route('items.index')->with('success', 'Item deleted successfully.');
+        $item = Item::findOrFail($id);
+        $item->update(['is_active' => $validated['is_active']]);
+
+        $message = $validated['is_active']
+            ? 'Item berhasil diaktifkan.'
+            : 'Item berhasil dinonaktifkan.';
+
+        return redirect()->route('items.index')->with('success', $message);
     }
+
+    // public function destroy(string $id) {
+    //     $item = Item::findOrFail($id);
+    //     $item->delete();
+    //
+    //     return redirect()->route('items.index')->with('success', 'Item deleted successfully.');
+    // }
+
 }

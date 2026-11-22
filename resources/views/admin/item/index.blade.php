@@ -93,19 +93,24 @@
                                 <a href="{{ route('items.edit', $item->id) }}"
                                 class="badge bg-warning text-dark text-decoration-none">
                                     <i class="bi bi-pencil"></i> Edit
-                                </a>
-
-                                <form action="{{ route('items.destroy', $item->id) }}"
-                                    method="POST"
-                                    class="d-inline m-0"
-                                    onsubmit="return confirm('Apakah Anda yakin ingin menghapus item ini?')">
-                                    @csrf
-                                    @method('DELETE')
-
-                                    <button type="submit" class="badge bg-danger border-0" style="cursor: pointer">
-                                        <i class="bi bi-trash"></i> Hapus
-                                    </button>
-                                </form>
+                                </a>       
+                                @if ($item->is_active == 1)
+                                    <form action="{{ route('items.updateStatus', $item->id) }}" method="POST" onsubmit="return confirm('Status item saat ini AKTIF. Lanjutkan untuk mengubahnya menjadi TIDAK AKTIF?')">
+                                        @csrf
+                                        <input type="hidden" name="is_active" value="0">
+                                        <button type="submit" class="badge bg-danger border-0">
+                                            <i class="bi bi-x-circle"></i> Nonaktifkan
+                                        </button>
+                                    </form> 
+                                @else
+                                    <form action="{{ route('items.updateStatus', $item->id) }}" method="POST" onsubmit="return confirm('Status item saat ini TIDAK AKTIF. Lanjutkan untuk mengubahnya menjadi AKTIF?')">
+                                        @csrf
+                                        <input type="hidden" name="is_active" value="1">
+                                        <button type="submit" class="badge bg-success border-0">
+                                            <i class="bi bi-check"></i> Aktifkan
+                                        </button> 
+                                    </form>
+                                @endif
                             </td>
                         </tr>
                         @endforeach
