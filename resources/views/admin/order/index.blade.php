@@ -24,7 +24,7 @@
                 <nav aria-label="breadcrumb" class="breadcrumb-header float-start float-lg-end">
                     <ol class="breadcrumb">
                         <li class="breadcrumb-item"><a href="{{ route('dashboard') }}">Dashboard</a></li>
-                        <li class="breadcrumb-item active text-info font-bold" aria-current="page">DaftarMenu</li>
+                        <li class="breadcrumb-item active text-info font-bold" aria-current="page">Kelola Pesanan</li>
                     </ol>
                 </nav>
             </div>
@@ -64,7 +64,9 @@
                             <th>Metode Pembayaran</th>
                             <th>Catatan</th>
                             <th>Dibuat Pada</th>
-                            <th>Ubah Status</th>
+                            @if (in_array(auth()->user()->role?->role_name, ['admin', 'cashier'], true))
+                                <th>Ubah Status</th>
+                            @endif
                             <th>Aksi</th>
                         </tr>
                     </thead>
@@ -99,6 +101,9 @@
                             <td>{{ $order->payment_method }}</td>
                             <td>{{ $order->note ?? $order->note ?? '-' }}</td>
                             <td>{{ $order->created_at?->format('d/m/Y H:i') ?? '-' }}</td>
+
+                            @php($roleName = auth()->user()->role?->role_name)
+                            @if (in_array($roleName, ['admin', 'cashier'], true))
                             <td>
                                 <form action="{{ route('orders.update', $order->id) }}" method="POST" class="d-flex gap-2 align-items-center">
                                     @csrf
@@ -106,17 +111,36 @@
                                     <select name="status" class="form-select form-select-sm" aria-label="Status pesanan">
                                         <option value="pending" @selected($order->status === 'pending')>Belum Dibayar</option>
                                         <option value="settlement" @selected($order->status === 'settlement')>Sudah Dibayar</option>
-                                        <option value="coocked" @selected(in_array($order->status, ['coocked', 'cooked'], true))>Cooked</option>
+                                        <option value="cooked" @selected(in_array($order->status, ['coocked', 'cooked'], true))>Cooked</option>
                                     </select>
                                     <button type="submit" class="badge bg-primary border-0" style="cursor: pointer;">Simpan</button>
                                 </form>
                             </td>
-                            <td>        
+                            @endif
+                            <td>
                                 <span class="badge bg-primary">
                                     <a href="{{ route('orders.show', $order->id) }}" class="text-white">
-                                        <i class="bi bi-eye"></i> Detail      
+                                        <i class="bi bi-eye"></i> Detail
                                     </a>
-                                </span>                       
+                                </span>
+                                @if (in_array(Auth::user()->role?->role_name, ['admin', 'cashier'], true)
+                                    && $order->status === 'pending'
+                                    && in_array($order->payment_method, ['tunai', 'qris'], true)
+                                    )
+                                    <form action="{{ route('orders.updateStatus', $order->id) }}" method="POST">
+                                        @csrf
+                                        <button type="submit" class="badge bg-success border-0">
+                                            <i class="bi bi-check-circle"></i> Terima Pembayaran
+                                        </button>
+                                    </form>
+                                @elseif(Auth::user()->role?->role_name === 'chef' && $order->status === 'settlement')
+                                    <form action="{{ route('orders.updateStatus', $order->id) }}" method="POST">
+                                        @csrf
+                                        <button type="submit" class="badge bg-success border-0">
+                                            <i class="bi bi-check-circle"></i> Pesanan Siap
+                                        </button>
+                                    </form>
+                                @endif
                             </td>
                         </tr>
                         @endforeach

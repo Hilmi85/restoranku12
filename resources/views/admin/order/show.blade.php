@@ -24,6 +24,7 @@
                 <nav aria-label="breadcrumb" class="breadcrumb-header float-start float-lg-end">
                     <ol class="breadcrumb">
                         <li class="breadcrumb-item"><a href="{{ route('dashboard') }}">Dashboard</a></li>
+                        <li class="breadcrumb-item"><a href="{{ route('orders.index') }}">Kelola Pesanan</a></li>
                         <li class="breadcrumb-item active text-info font-bold" aria-current="page">Detail Pesanan</li>
                     </ol>
                 </nav>
@@ -40,7 +41,7 @@
                     <div class="col-md-6">
                         <p><strong>Dibuat Pada      :</strong> {{ $order->created_at?->format('d-m-Y H:i') ?? '-' }}</p>
                         <p><strong>Nama Pelanggan   :</strong> {{ $order->user?->fullname ?? '-' }}</p>
-                        <p><strong>Status           :</strong> 
+                        <p><strong>Status           :</strong>
                             @php
                                 $status = strtolower($order->status ?? '');
                                 $statusLabel = match ($status) {
