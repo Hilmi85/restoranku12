@@ -23,7 +23,7 @@
             <div class="col-12 col-md-6 order-md-2 order-first">
                 <nav aria-label="breadcrumb" class="breadcrumb-header float-start float-lg-end">
                     <ol class="breadcrumb">
-                        <li class="breadcrumb-item"><a href="{{ route('dashboard') }}">Dashboard</a></li>
+                        <li class="breadcrumb-item"><a href="{{ route('dashboard') }}">Dasbor</a></li>
                         <li class="breadcrumb-item active text-info font-bold" aria-current="page">Kelola Pesanan</li>
                     </ol>
                 </nav>
@@ -44,7 +44,7 @@
                 @if (session('success'))
                     <div class="alert alert-success alert-dismissible fade show" role="alert">
                         {{ session('success') }}
-                        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Tutup"></button>
                     </div>
                 @endif
                 @if ($errors->any())
@@ -57,13 +57,13 @@
                         <tr>
                             <th>No</th>
                             <th>Kode Pesanan</th>
-                            <th>Nama Pelanggan</th>
+                            <th>Nama pelanggan</th>
                             <th>Total</th>
                             <th>Status</th>
-                            <th>No. Meja</th>
+                            <th>Nomor meja</th>
                             <th>Metode Pembayaran</th>
                             <th>Catatan</th>
-                            <th>Dibuat Pada</th>
+                            <th>Dibuat pada</th>
                             @if (in_array(auth()->user()->role?->role_name, ['admin', 'cashier'], true))
                                 <th>Ubah Status</th>
                             @endif
@@ -81,9 +81,9 @@
                                 @php
                                     $status = strtolower($order->status ?? '');
                                     $statusLabel = match ($status) {
-                                        'settlement' => 'Sudah Dibayar',
-                                        'pending' => 'Belum Dibayar',
-                                        'cooked', 'coocked' => 'Cooked',
+                                        'settlement' => 'Lunas',
+                                        'pending' => 'Menunggu pembayaran',
+                                        'cooked', 'coocked' => 'Selesai dimasak',
                                         default => ucfirst($status ?: '-'),
                                     };
                                     $statusClass = match ($status) {
@@ -98,7 +98,7 @@
                                 </span>
                             </td>
                             <td>{{ $order->table_number ?? '-' }}</td>
-                            <td>{{ $order->payment_method }}</td>
+                            <td>{{ $order->payment_method === 'qris' ? 'QRIS' : 'Tunai' }}</td>
                             <td>{{ $order->note ?? $order->note ?? '-' }}</td>
                             <td>{{ $order->created_at?->format('d/m/Y H:i') ?? '-' }}</td>
 
@@ -109,9 +109,9 @@
                                     @csrf
                                     @method('PATCH')
                                     <select name="status" class="form-select form-select-sm" aria-label="Status pesanan">
-                                        <option value="pending" @selected($order->status === 'pending')>Belum Dibayar</option>
-                                        <option value="settlement" @selected($order->status === 'settlement')>Sudah Dibayar</option>
-                                        <option value="cooked" @selected(in_array($order->status, ['coocked', 'cooked'], true))>Cooked</option>
+                                        <option value="pending" @selected($order->status === 'pending')>Menunggu pembayaran</option>
+                                        <option value="settlement" @selected($order->status === 'settlement')>Lunas</option>
+                                        <option value="cooked" @selected(in_array($order->status, ['coocked', 'cooked'], true))>Selesai dimasak</option>
                                     </select>
                                     <button type="submit" class="badge bg-primary border-0" style="cursor: pointer;">Simpan</button>
                                 </form>

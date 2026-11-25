@@ -41,7 +41,7 @@ class MenuController extends Controller
         if (!$menu) {
             return response()->json([
                 'status' => 'error',
-                'message' => 'Menu item not found'
+                'message' => 'Menu tidak ditemukan.'
                 ]);
         }
 
@@ -62,7 +62,7 @@ class MenuController extends Controller
         Session::put('cart', $cart);
         return response()->json([
             'status' => 'success',
-            'message' => 'Menu item added to cart',
+            'message' => 'Menu berhasil ditambahkan ke keranjang.',
             'cart' => $cart
         ]);
     }
@@ -76,7 +76,7 @@ class MenuController extends Controller
     if ($newQty <= 0) {
         return response()->json([
             'success' => false,
-            'message' => 'Quantity is invalid.'
+            'message' => 'Jumlah menu tidak valid.'
         ]);
     }
 
@@ -85,17 +85,17 @@ class MenuController extends Controller
     if (isset($cart[$itemId])) {
         $cart[$itemId]['qty'] = $newQty;
         Session::put('cart', $cart);
-        Session::flash('success', 'Cart updated successfully');
+        Session::flash('success', 'Keranjang berhasil diperbarui.');
 
         return response()->json([
             'success' => true,
-            'message' => 'Cart updated successfully.'
+            'message' => 'Keranjang berhasil diperbarui.'
         ]);
     }
 
     return response()->json([
         'success' => false,
-        'message' => 'Item not found in cart.'
+        'message' => 'Menu tidak ditemukan di keranjang.'
     ]);
 }
 
@@ -108,7 +108,7 @@ class MenuController extends Controller
         if (isset($cart[$itemId])) {
             unset($cart[$itemId]);
             Session::put('cart', $cart);
-            Session::flash('success', 'Item removed from cart');
+            Session::flash('success', 'Menu dihapus dari keranjang.');
 
             return response()->json([
                 'success' => true,
@@ -124,8 +124,8 @@ class MenuController extends Controller
     public function clearCart()
     {
         Session::forget('cart');
-        Session::flash('success', 'Cart cleared successfully');
-        return redirect()->route('cart')->with('success', 'Cart cleared successfully');
+        Session::flash('success', 'Keranjang berhasil dikosongkan.');
+        return redirect()->route('cart')->with('success', 'Keranjang berhasil dikosongkan.');
     }
 
     // CHECKOUT
@@ -133,7 +133,7 @@ class MenuController extends Controller
     {
         $cart = Session::get('cart');
         if (empty($cart)) {
-            return redirect()->route('cart')->with('error', 'Your cart is empty. Please add items to checkout.');
+            return redirect()->route('cart')->with('error', 'Keranjang Anda kosong. Tambahkan menu sebelum melanjutkan ke pembayaran.');
         }
 
         $tableNumber = Session::get('tableNumber');
@@ -148,7 +148,7 @@ class MenuController extends Controller
         $tableNumber = Session::get('tableNumber');
 
         if (empty($cart)) {
-            return redirect()->route('cart')->with('error', 'Your cart is empty. Please add items to checkout.');
+            return redirect()->route('cart')->with('error', 'Keranjang Anda kosong. Tambahkan menu sebelum melanjutkan ke pembayaran.');
         }
 
         $validator = Validator::make($request->all(), [
@@ -207,7 +207,7 @@ class MenuController extends Controller
         if ($request->payment_method === 'tunai') {
             Session::forget('cart');
 
-            return redirect()->route('checkout.success', ['orderId' => $order->order_code])->with('success', 'Order placed successfully.');
+            return redirect()->route('checkout.success', ['orderId' => $order->order_code])->with('success', 'Pesanan berhasil dibuat.');
         } else {
             \Midtrans\Config::$serverKey = config('midtrans.server_key');
             \Midtrans\Config::$isProduction = config('midtrans.is_production');
@@ -240,7 +240,7 @@ class MenuController extends Controller
             } catch (\Exception $e) {
                 return response()->json([
                     'status' => 'error',
-                    'message' => 'Failed to create payment token: ' . $e->getMessage(),
+                    'message' => 'Gagal membuat token pembayaran: ' . $e->getMessage(),
                 ], 500);
             }
         }
@@ -250,7 +250,7 @@ class MenuController extends Controller
         $order = Order::where('order_code', $orderId)->first();
 
         if (!$order) {
-            return redirect()->route('menu')->with('error', 'Order not found.');
+            return redirect()->route('menu')->with('error', 'Pesanan tidak ditemukan.');
         }
 
         $orderItems = OrderItem::where('order_id', $order->id)->get();

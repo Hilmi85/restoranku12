@@ -30,14 +30,14 @@ class ItemController extends Controller
             'is_active' => 'required|boolean',
         ],
         [
-            'name.required' => 'The item name is required.',
-            'description.string' => 'The description must be a string.',
-            'price.required' => 'The price is required.',
-            'category_id.required' => 'The category is required.',
-            'img.image' => 'The uploaded file must be an image.',
-            'img.max' => 'The image size must not exceed 2MB.',
-            'is_active.required' => 'Please specify if the item is active or not.',
-            'is_active.boolean' => 'The is_active field must be true or false.',
+            'name.required' => 'Nama menu wajib diisi.',
+            'description.string' => 'Deskripsi harus berupa teks.',
+            'price.required' => 'Harga wajib diisi.',
+            'category_id.required' => 'Kategori wajib dipilih.',
+            'img.image' => 'Berkas yang diunggah harus berupa gambar.',
+            'img.max' => 'Ukuran gambar tidak boleh lebih dari 2 MB.',
+            'is_active.required' => 'Tentukan apakah menu berstatus aktif.',
+            'is_active.boolean' => 'Status aktif harus bernilai ya atau tidak.',
         ]);
 
         if  ($request->hasFile('img')) {
@@ -49,7 +49,7 @@ class ItemController extends Controller
 
         $item = Item::create($validatedData);
 
-        return redirect()->route('items.index')->with('success', 'Item created successfully.');
+        return redirect()->route('items.index')->with('success', 'Menu berhasil ditambahkan.');
     }
 
     public function edit(string $id) {
@@ -71,14 +71,14 @@ class ItemController extends Controller
             'is_active' => 'required|boolean',
         ],
         [
-            'name.required' => 'The item name is required.',
-            'description.string' => 'The description must be a string.',
-            'price.required' => 'The price is required.',
-            'category_id.required' => 'The category is required.',
-            'img.image' => 'The uploaded file must be an image.',
-            'img.max' => 'The image size must not exceed 2MB.',
-            'is_active.required' => 'Please specify if the item is active or not.',
-            'is_active.boolean' => 'The is_active field must be true or false.',
+            'name.required' => 'Nama menu wajib diisi.',
+            'description.string' => 'Deskripsi harus berupa teks.',
+            'price.required' => 'Harga wajib diisi.',
+            'category_id.required' => 'Kategori wajib dipilih.',
+            'img.image' => 'Berkas yang diunggah harus berupa gambar.',
+            'img.max' => 'Ukuran gambar tidak boleh lebih dari 2 MB.',
+            'is_active.required' => 'Tentukan apakah menu berstatus aktif.',
+            'is_active.boolean' => 'Status aktif harus bernilai ya atau tidak.',
         ]);
 
         if  ($request->hasFile('img')) {
@@ -90,7 +90,7 @@ class ItemController extends Controller
 
         $item->update($validatedData);
 
-        return redirect()->route('items.index')->with('success', 'Item updated successfully.');
+        return redirect()->route('items.index')->with('success', 'Menu berhasil diperbarui.');
     }
 
     public function updateStatus(Request $request, $id)
@@ -103,8 +103,8 @@ class ItemController extends Controller
         $item->update(['is_active' => $validated['is_active']]);
 
         $message = $validated['is_active']
-            ? 'Item berhasil diaktifkan.'
-            : 'Item berhasil dinonaktifkan.';
+            ? 'Menu berhasil diaktifkan.'
+            : 'Menu berhasil dinonaktifkan.';
 
         return redirect()->route('items.index')->with('success', $message);
     }
@@ -113,7 +113,7 @@ class ItemController extends Controller
     //     $item = Item::findOrFail($id);
     //     $item->delete();
     //
-    //     return redirect()->route('items.index')->with('success', 'Item deleted successfully.');
+    //     return redirect()->route('items.index')->with('success', 'Menu berhasil dihapus.');
     // }
 
 }

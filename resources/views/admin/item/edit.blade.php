@@ -1,19 +1,19 @@
 @extends('admin.layouts.master')
-@section('title', 'Edit Menu')
+@section('title', 'Ubah Menu')
 
 @section('content')
 <div class="page-title">
     <div class="row">
         <div class="col-12 col-md-6 order-md-1 order-last">
-            <h3>Edit Menu</h3>
-            <p class="text-subtitle text-muted">Edit menu yang ada</p>
+            <h3>Ubah Menu</h3>
+            <p class="text-subtitle text-muted">Ubah menu yang ada</p>
         </div>
         <div class="col-12 col-md-6 order-md-2 order-first">
             <nav aria-label="breadcrumb" class="breadcrumb-header float-start float-lg-end">
                 <ol class="breadcrumb">
-                    <li class="breadcrumb-item"><a href="{{ route('dashboard') }}">Dashboard</a></li>
+                    <li class="breadcrumb-item"><a href="{{ route('dashboard') }}">Dasbor</a></li>
                     <li class="breadcrumb-item"><a href="{{ route('items.index') }}">Daftar Menu</a></li>
-                    <li class="breadcrumb-item active text-info font-bold" aria-current="page">Edit Menu</li>
+                    <li class="breadcrumb-item active text-info font-bold" aria-current="page">Ubah Menu</li>
                 </ol>
             </nav>
         </div>
@@ -23,13 +23,13 @@
     <div class="card-body">
         @if ($errors->any())
             <div class="alert alert-danger alert-dismissible fade show" role="alert">
-                <h5 class="alert-heading"> Update Error!</h5>
+                <h5 class="alert-heading"> Gagal memperbarui data</h5>
                 @foreach ($errors->all() as $error)
                     <li class="m-3">
                         <i class="bi bi-exclamation-triangle-fill"></i>  {{ $error }}
                     </li>
                 @endforeach
-                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Tutup"></button>
             </div>
         @endif
         <form class="form" action="{{ route('items.update', $item->id) }}" enctype="multipart/form-data" method="POST">
@@ -40,20 +40,20 @@
                     <div class="col-md-12">
                         <div class="form-group">
                             <label for="name">Nama Menu</label>
-                            <input type="text" class="form-control" name="name" id="name" placeholder="Input Nama Menu" required value="{{ $item->name }}">
+                            <input type="text" class="form-control" name="name" id="name" placeholder="Masukkan nama menu" required value="{{ $item->name }}">
                         </div>
                         <div class="form-group">
                             <label for="description">Deskripsi</label>
-                            <textarea class="form-control" name="description" id="description" placeholder="Input Deskripsi" required>{{ $item->description }}</textarea>
+                            <textarea class="form-control" name="description" id="description" placeholder="Masukkan deskripsi" required>{{ $item->description }}</textarea>
                         </div>
                         <div class="form-group">
                             <label for="price">Harga</label>
-                            <input type="number" class="form-control" name="price" id="price" placeholder="Input Harga" required value="{{ $item->price }}">
+                            <input type="number" class="form-control" name="price" id="price" placeholder="Masukkan harga" required value="{{ $item->price }}">
                         </div>
                         <div class="form-group">
                             <label for="category">Kategori</label>
                             <select class="form-control" id="category" name="category_id" required>
-                                <option value="" disabled>Pilih Kategori</option>
+                                <option value="" disabled>Pilih kategori</option>
                                 @foreach ($categories as $category)
                                     <option value="{{ $category->id }}" {{ $item->category_id == $category->id ? 'selected' : '' }}>{{ $category->cat_name }}</option>
                                 @endforeach
@@ -78,7 +78,7 @@
                         </div>
                         <div class="form-group d-flex justify-content-end">
                             <button type="submit" class="btn btn-primary me-1 mb-1">Simpan</button>
-                            <button type="reset" class="btn btn-light-secondary me-1 mb-1">Reset</button>
+                            <button type="reset" class="btn btn-light-secondary me-1 mb-1">Atur ulang</button>
                             <a href="{{ route('items.index') }}" class="btn btn-danger mb-1">Batal</a>
                         </div>
 

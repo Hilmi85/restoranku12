@@ -3,7 +3,7 @@
         <div class="sidebar-header position-relative">
             <div class="d-flex justify-content-between align-items-center">
                 <div class="logo">
-                    <a href="{{ url('index.html') }}">Restoranku</a> {{-- <img src="" alt="" srcset=""> --}}
+                    <a href="{{ route('menu') }}">Restoranku</a>
                 </div>
                 <div class="theme-toggle d-flex gap-2  align-items-center mt-2">
                     <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" aria-hidden="true"
@@ -41,13 +41,13 @@
         <div class="sidebar-menu">
             <ul class="menu">
                 @php($roleName = auth()->user()->role?->role_name)
-                <li class="sidebar-title">Menu</li>
+                <li class="sidebar-title">Navigasi</li>
 
                 @if (in_array($roleName, ['admin', 'cashier', 'chef'], true))
                 <li class="sidebar-item {{ request()->routeIs('dashboard') ? 'active' : '' }}">
                     <a href="{{ route('dashboard') }}" class='sidebar-link'>
                         <i class="bi bi-grid-fill"></i>
-                        <span>Dashboard</span>
+                        <span>Dasbor</span>
                     </a>
                 </li>
                 @endif
@@ -73,7 +73,7 @@
                 <li class="sidebar-item {{ request()->routeIs('roles.*') ? 'active' : '' }}">
                     <a href="{{ route('roles.index') }}" class='sidebar-link'>
                         <i class="bi bi-person-fill"></i>
-                        <span>Manajemen Role</span>
+                        <span>Manajemen Peran</span>
                     </a>
                 </li>
                 <li class="sidebar-item {{ request()->routeIs('categories.*') ? 'active' : '' }}">
@@ -86,7 +86,7 @@
                 <li class="sidebar-item">
                     <form method="POST" action="{{ route('logout') }}">
                         @csrf
-                        <button type="submit" class="sidebar-link w-100 text-start border-0 bg-transparent" onClick="Yakin ingin logout?">
+                        <button type="submit" class="sidebar-link w-100 text-start border-0 bg-transparent" onclick="return confirm('Apakah Anda yakin ingin keluar?')">
                             <i class="bi bi-box-arrow-right"></i>
                             <span>Keluar</span>
                         </button>

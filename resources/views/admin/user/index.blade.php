@@ -18,13 +18,13 @@
         <div class="row">
             <div class="col-12 col-md-6 order-md-1 order-last">
                 <h3>Manajemen Karyawan</h3>
-                <p class="text-subtitle text-muted">Informasi Karyawan yang Terdaftar</p>
+                <p class="text-subtitle text-muted">Informasi karyawan yang terdaftar</p>
             </div>
             <div class="col-12 col-md-6 order-md-2 order-first">
                 <nav aria-label="breadcrumb" class="breadcrumb-header float-start float-lg-end">
                     <ol class="breadcrumb">
-                        <li class="breadcrumb-item"><a href="{{ route('dashboard') }}">Dashboard</a></li>
-                        <li class="breadcrumb-item active text-info font-bold" aria-current="page">ManajemenKaryawan</li>
+                        <li class="breadcrumb-item"><a href="{{ route('dashboard') }}">Dasbor</a></li>
+                        <li class="breadcrumb-item active text-info font-bold" aria-current="page">Manajemen Karyawan</li>
                     </ol>
                 </nav>
             </div>
@@ -36,7 +36,7 @@
                 <div class="card-title order-first">
                     <a href="{{ route('users.create') }}" class="btn btn-primary float-start float-lg-end">
                         <i class="bi bi-plus"></i>
-                        Tambah User
+                        Tambah pengguna
                     </a>
                 </div>
             </div>
@@ -44,7 +44,7 @@
                 @if (session('success'))
                     <div class="alert alert-success alert-dismissible fade show" role="alert">
                         <i class="bi bi-check-circle-fill"></i>  {{ session('success') }}
-                        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Tutup"></button>
                     </div>
                 @endif
 
@@ -52,11 +52,11 @@
                     <thead>
                         <tr>
                             <th>No</th>
-                            <th>Username</th>
-                            <th>Nama Lengkap</th>
+                            <th>Nama pengguna</th>
+                            <th>Nama lengkap</th>
                             <th>Email</th>
-                            <th>No. Tlp</th>
-                            <th>Role</th>
+                            <th>Nomor telepon</th>
+                            <th>Peran</th>
                             <th>Aksi</th>
                         </tr>
                     </thead>
@@ -68,18 +68,18 @@
                             <td>{{ $user->fullname }}</td>
                             <td>{{ $user->email }}</td>
                             <td>{{ $user->phone }}</td>
-                            <td>{{ $user->role->role_name }}</td>
+                            <td>{{ $user->role?->role_name ?? '-' }}</td>
 
                             <td class="text-nowrap">
                                 <a href="{{ route('users.edit', $user->id) }}"
                                 class="badge bg-warning text-dark text-decoration-none">
-                                    <i class="bi bi-pencil"></i> Edit
+                                    <i class="bi bi-pencil"></i> Ubah
                                 </a>
 
                                 <form action="{{ route('users.destroy', $user->id) }}"
                                     method="POST"
                                     class="d-inline m-0"
-                                    onsubmit="return confirm('Apakah Anda yakin ingin menghapus user ini?')">
+                                    onsubmit="return confirm('Apakah Anda yakin ingin menghapus akun ini?')">
                                     @csrf
                                     @method('DELETE')
 

@@ -23,8 +23,8 @@
             <div class="col-12 col-md-6 order-md-2 order-first">
                 <nav aria-label="breadcrumb" class="breadcrumb-header float-start float-lg-end">
                     <ol class="breadcrumb">
-                        <li class="breadcrumb-item"><a href="{{ route('dashboard') }}">Dashboard</a></li>
-                        <li class="breadcrumb-item active text-info font-bold" aria-current="page">DaftarKategori</li>
+                        <li class="breadcrumb-item"><a href="{{ route('dashboard') }}">Dasbor</a></li>
+                        <li class="breadcrumb-item active text-info font-bold" aria-current="page">Daftar kategori</li>
                     </ol>
                 </nav>
             </div>
@@ -44,7 +44,7 @@
                 @if (session('success'))
                     <div class="alert alert-success alert-dismissible fade show" role="alert">
                         <i class="bi bi-check-circle-fill"></i>  {{ session('success') }}
-                        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Tutup"></button>
                     </div>
                 @endif
 
@@ -67,7 +67,7 @@
                             <td class="text-nowrap">
                                 <a href="{{ route('categories.edit', $category->id) }}"
                                 class="badge bg-warning text-dark text-decoration-none">
-                                    <i class="bi bi-pencil"></i> Edit
+                                    <i class="bi bi-pencil"></i> Ubah
                                 </a>
 
                                 <form action="{{ route('categories.destroy', $category->id) }}"

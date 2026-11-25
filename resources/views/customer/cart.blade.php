@@ -21,7 +21,7 @@
             <div class="customer-empty-state">
                 <span class="customer-empty-icon"><i class="fas fa-shopping-bag" aria-hidden="true"></i></span>
                 <h2>Keranjang masih kosong</h2>
-                <p>Yuk, pilih hidangan favorit Anda dan tambahkan ke keranjang.</p>
+                <p>Silakan pilih hidangan favorit Anda dan tambahkan ke keranjang.</p>
                 <a href="{{ route('menu') }}" class="customer-primary-button">
                     Jelajahi menu <i class="fas fa-arrow-right" aria-hidden="true"></i>
                 </a>
@@ -35,7 +35,7 @@
                     <div class="customer-panel">
                         <div class="customer-panel-heading d-flex align-items-center justify-content-between gap-3">
                             <div>
-                                <h2>Item pesanan</h2>
+                                <h2>Menu dalam keranjang</h2>
                                 <p>Atur jumlah atau hapus menu yang tidak diperlukan.</p>
                             </div>
                             <a href="{{ route('menu') }}" class="customer-secondary-button d-none d-sm-inline-flex">

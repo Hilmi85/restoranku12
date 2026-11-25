@@ -11,7 +11,7 @@
         @csrf
 
         <div class="auth-field">
-            <label for="email">Email</label>
+            <label for="email">Alamat email</label>
             <div class="auth-input-wrap">
                 <svg class="auth-input-icon" viewBox="0 0 24 24" fill="none" aria-hidden="true">
                     <rect x="3.5" y="5" width="17" height="14" rx="2.5" stroke="currentColor" stroke-width="1.6"/>

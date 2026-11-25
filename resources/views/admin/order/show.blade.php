@@ -23,7 +23,7 @@
             <div class="col-12 col-md-6 order-md-2 order-first">
                 <nav aria-label="breadcrumb" class="breadcrumb-header float-start float-lg-end">
                     <ol class="breadcrumb">
-                        <li class="breadcrumb-item"><a href="{{ route('dashboard') }}">Dashboard</a></li>
+                        <li class="breadcrumb-item"><a href="{{ route('dashboard') }}">Dasbor</a></li>
                         <li class="breadcrumb-item"><a href="{{ route('orders.index') }}">Kelola Pesanan</a></li>
                         <li class="breadcrumb-item active text-info font-bold" aria-current="page">Detail Pesanan</li>
                     </ol>
@@ -45,9 +45,9 @@
                             @php
                                 $status = strtolower($order->status ?? '');
                                 $statusLabel = match ($status) {
-                                    'settlement' => 'Sudah Dibayar',
-                                    'pending' => 'Belum Dibayar',
-                                    'cooked', 'coocked' => 'Cooked',
+                                    'settlement' => 'Lunas',
+                                    'pending' => 'Menunggu pembayaran',
+                                    'cooked', 'coocked' => 'Selesai dimasak',
                                     default => ucfirst($status ?: '-'),
                                 };
                                 $statusClass = match ($status) {
@@ -64,7 +64,7 @@
                     </div>
                     <div class="col-md-6">
                         <p><strong>No. Meja         :</strong> {{ $order->table_number ?? '-' }}</p>
-                        <p><strong>Metode Pembayaran:</strong> {{ $order->payment_method }}</p>
+                        <p><strong>Metode Pembayaran:</strong> {{ $order->payment_method === 'qris' ? 'QRIS' : 'Tunai' }}</p>
                         <p><strong>Catatan          :</strong> {{ $order->note ?? '-' }}</p>
                     </div>
                 </div>
@@ -75,7 +75,7 @@
     <section class="section">
         <div class="card">
             <div class="card-header">
-                <h4>Daftar Item Pesanan</h4>
+                <h4>Daftar menu pesanan</h4>
             </div>
             <div class="card-body">
                 <table class="table table-striped" id="table1">
@@ -102,7 +102,7 @@
                         @endforeach
                     </tbody>
                         <tr>
-                            <td colspan="4" class="text-end"><strong>Total:</strong></td>
+                            <td colspan="4" class="text-end"><strong>Subtotal:</strong></td>
                             <td><strong>Rp {{ number_format((float) $order->subtotal, 0, ',', '.') }}</strong></td>
                         </tr>
                         <tr>
@@ -110,7 +110,7 @@
                             <td><strong>Rp {{ number_format((float)$order->tax, 0, ',', '.') }}</strong></td>
                         </tr>
                         <tr>
-                            <td colspan="4" class="text-end"><strong>Grand Total:</strong></td>
+                            <td colspan="4" class="text-end"><strong>Total keseluruhan:</strong></td>
                             <td><strong>Rp {{ number_format((float) $order->grand_total, 0, ',', '.') }}</strong></td>
                         </tr>
                 </table>

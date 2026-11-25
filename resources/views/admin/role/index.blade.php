@@ -1,5 +1,5 @@
 @extends('admin.layouts.master')
-@section('title', 'Roles')
+@section('title', 'Peran')
 
 @section('css')
 <link rel="stylesheet" href="{{ asset('assets/admin/extensions/simple-datatables/style.css') }}">
@@ -17,14 +17,14 @@
     <div class="page-title">
         <div class="row">
             <div class="col-12 col-md-6 order-md-1 order-last">
-                <h3>Daftar Roles</h3>
-                <p class="text-subtitle text-muted">Berbagai role pilihan</p>
+                <h3>Daftar Peran</h3>
+                <p class="text-subtitle text-muted">Daftar peran yang tersedia</p>
             </div>
             <div class="col-12 col-md-6 order-md-2 order-first">
                 <nav aria-label="breadcrumb" class="breadcrumb-header float-start float-lg-end">
                     <ol class="breadcrumb">
-                        <li class="breadcrumb-item"><a href="{{ route('dashboard') }}">Dashboard</a></li>
-                        <li class="breadcrumb-item active text-info font-bold" aria-current="page">DaftarRoles</li>
+                        <li class="breadcrumb-item"><a href="{{ route('dashboard') }}">Dasbor</a></li>
+                        <li class="breadcrumb-item active text-info font-bold" aria-current="page">Daftar peran</li>
                     </ol>
                 </nav>
             </div>
@@ -36,7 +36,7 @@
                 <div class="card-title order-first">
                     <a href="{{ route('roles.create') }}" class="btn btn-primary float-start float-lg-end">
                         <i class="bi bi-plus"></i>
-                        Tambah Role
+                        Tambah Peran
                     </a>
                 </div>
             </div>
@@ -44,7 +44,7 @@
                 @if (session('success'))
                     <div class="alert alert-success alert-dismissible fade show" role="alert">
                         <i class="bi bi-check-circle-fill"></i>  {{ session('success') }}
-                        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Tutup"></button>
                     </div>
                 @endif
 
@@ -52,7 +52,7 @@
                     <thead>
                         <tr>
                             <th>No</th>
-                            <th>Nama Role</th>
+                            <th>Nama Peran</th>
                             <th>Deskripsi</th>
                             <th>Aksi</th>
                         </tr>
@@ -66,13 +66,13 @@
                             <td class="text-nowrap">
                                 <a href="{{ route('roles.edit', $role->id) }}"
                                 class="badge bg-warning text-dark text-decoration-none">
-                                    <i class="bi bi-pencil"></i> Edit
+                                    <i class="bi bi-pencil"></i> Ubah
                                 </a>
 
                                 <form action="{{ route('roles.destroy', $role->id) }}"
                                     method="POST"
                                     class="d-inline m-0"
-                                    onsubmit="return confirm('Apakah Anda yakin ingin menghapus role ini?')">
+                                    onsubmit="return confirm('Apakah Anda yakin ingin menghapus peran ini?')">
                                     @csrf
                                     @method('DELETE')
 

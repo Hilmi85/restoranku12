@@ -32,25 +32,25 @@ class UserController extends Controller
             'password' => 'required|string|min:8|confirmed',
         ],
         [
-            'username.required' => 'The username is required.',
-            'username.unique' => 'The username has already been taken.',
-            'fullname.required' => 'The full name is required.',
-            'email.required' => 'The email is required.',
-            'email.email' => 'The email must be a valid email address.',
-            'email.unique' => 'The email has already been taken.',
-            'phone.required' => 'The phone number is required.',
-            'role_id.required' => 'The role is required.',
-            'role_id.exists' => 'The selected role is invalid.',
-            'password.required' => 'The password is required.',
-            'password.min' => 'The password must be at least 8 characters.',
-            'password.confirmed' => 'The password confirmation does not match.',
+            'username.required' => 'Nama pengguna wajib diisi.',
+            'username.unique' => 'Nama pengguna sudah digunakan.',
+            'fullname.required' => 'Nama lengkap wajib diisi.',
+            'email.required' => 'Alamat email wajib diisi.',
+            'email.email' => 'Alamat email harus valid.',
+            'email.unique' => 'Alamat email sudah digunakan.',
+            'phone.required' => 'Nomor telepon wajib diisi.',
+            'role_id.required' => 'Peran wajib dipilih.',
+            'role_id.exists' => 'Peran yang dipilih tidak valid.',
+            'password.required' => 'Kata sandi wajib diisi.',
+            'password.min' => 'Kata sandi harus terdiri dari minimal 8 karakter.',
+            'password.confirmed' => 'Konfirmasi kata sandi tidak sesuai.',
         ]);
 
         $validatedData['password'] = bcrypt($validatedData['password']);
         
         User::create($validatedData);
 
-        return redirect()->route('users.index')->with('success', 'User created successfully.');
+        return redirect()->route('users.index')->with('success', 'Data pengguna berhasil ditambahkan.');
     }
 
     public function edit(string $id) {
@@ -81,17 +81,17 @@ class UserController extends Controller
             ],
         ],
         [
-            'username.required' => 'The username is required.',
-            'username.unique' => 'The username has already been taken.',
-            'fullname.required' => 'The full name is required.',
-            'email.required' => 'The email is required.',
-            'email.email' => 'The email must be a valid email address.',
-            'email.unique' => 'The email has already been taken.',
-            'phone.required' => 'The phone number is required.',
-            'role_id.required' => 'The role is required.',
-            'role_id.exists' => 'The selected role is invalid.',
-            'password.min' => 'The password must be at least 8 characters.',
-            'password.confirmed' => 'The password confirmation does not match.',
+            'username.required' => 'Nama pengguna wajib diisi.',
+            'username.unique' => 'Nama pengguna sudah digunakan.',
+            'fullname.required' => 'Nama lengkap wajib diisi.',
+            'email.required' => 'Alamat email wajib diisi.',
+            'email.email' => 'Alamat email harus valid.',
+            'email.unique' => 'Alamat email sudah digunakan.',
+            'phone.required' => 'Nomor telepon wajib diisi.',
+            'role_id.required' => 'Peran wajib dipilih.',
+            'role_id.exists' => 'Peran yang dipilih tidak valid.',
+            'password.min' => 'Kata sandi harus terdiri dari minimal 8 karakter.',
+            'password.confirmed' => 'Konfirmasi kata sandi tidak sesuai.',
         ]);
 
         if (!empty($validatedData['password'])) {
@@ -102,13 +102,13 @@ class UserController extends Controller
 
         $user->update($validatedData);
 
-        return redirect()->route('users.index')->with('success', 'User updated successfully.');
+        return redirect()->route('users.index')->with('success', 'Data pengguna berhasil diperbarui.');
     }
 
     public function destroy(string $id) {
         $user = User::findOrFail($id);
         $user->delete();
 
-        return redirect()->route('users.index')->with('success', 'User deleted successfully.');
+        return redirect()->route('users.index')->with('success', 'Data pengguna berhasil dihapus.');
     }
 }

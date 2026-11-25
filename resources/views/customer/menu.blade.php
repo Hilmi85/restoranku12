@@ -5,7 +5,7 @@
 @section('content')
     <section class="customer-page-intro">
         <p class="customer-eyebrow">Dibuat dengan sepenuh hati</p>
-        <h1>Temukan menu favoritmu</h1>
+        <h1>Temukan menu favorit Anda</h1>
         <p>Pilihan hidangan lezat untuk menemani momen makan Anda. Pilih menu, lalu tambahkan ke keranjang.</p>
         <div class="customer-intro-count" aria-label="{{ $items->count() }} menu tersedia">
             <div><strong>{{ $items->count() }}</strong><span>menu tersedia</span></div>

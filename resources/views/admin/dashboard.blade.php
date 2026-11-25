@@ -1,12 +1,13 @@
 @extends('admin.layouts.master')
-@section('title', 'Dashboard')
+@section('title', 'Dasbor')
 
 @section('css')
 @endsection
 
 @section('content')
     <div class="page-heading">
-        <h3>Selamat Datang, {{ ucfirst(auth()->user()->role?->role_name ?? 'users') }}!</h3>
+        @php($roleLabel = auth()->user()->role?->role_name ?? 'pengguna')
+        <h3>Selamat datang, {{ $roleLabel }}!</h3>
     </div>
     <div class="page-content">
         <section class="row">
@@ -104,7 +105,7 @@
                                     id="chart-profile-visit"
                                     data-labels='@json($salesChartLabels)'
                                     data-values='@json($salesChartValues)'
-                                    aria-label="Grafik penjualan bulanan"
+                                    aria-label="Grafik penjualan"
                                     role="img"></div>
                             </div>
                         </div>

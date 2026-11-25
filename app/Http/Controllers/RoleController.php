@@ -25,7 +25,7 @@ class RoleController extends Controller
 
         Role::create($validatedData);
 
-        return redirect()->route('roles.index')->with('success', 'Role created successfully.');
+        return redirect()->route('roles.index')->with('success', 'Peran berhasil ditambahkan.');
     }
 
     public function edit(string $id) {
@@ -43,13 +43,13 @@ class RoleController extends Controller
         $role = Role::findOrFail($id);
         $role->update($validatedData);
 
-        return redirect()->route('roles.index')->with('success', 'Role updated successfully.');
+        return redirect()->route('roles.index')->with('success', 'Peran berhasil diperbarui.');
     }
 
     public function destroy(string $id) {
         $role = Role::findOrFail($id);
         $role->delete();
 
-        return redirect()->route('roles.index')->with('success', 'Role deleted successfully.');
+        return redirect()->route('roles.index')->with('success', 'Peran berhasil dihapus.');
     }
 }

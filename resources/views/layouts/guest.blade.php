@@ -268,7 +268,7 @@
                 <span class="auth-brand-mark" aria-hidden="true">R</span>
                 <span>
                     <span class="auth-brand-name">Restoranku</span>
-                    <span class="auth-brand-caption">RESTAURANT MANAGEMENT</span>
+                    <span class="auth-brand-caption">MANAJEMEN RESTORAN</span>
                 </span>
             </a>
 
@@ -304,7 +304,7 @@
                         <span class="auth-brand-mark" aria-hidden="true">R</span>
                         <span>
                             <span class="auth-brand-name">Restoranku</span>
-                            <span class="auth-brand-caption">RESTAURANT MANAGEMENT</span>
+                            <span class="auth-brand-caption">MANAJEMEN RESTORAN</span>
                         </span>
                     </a>
                 </div>

@@ -58,7 +58,7 @@ var optionsProfileVisit = {
 }
 let optionsVisitorsProfile = {
   series: [70, 30],
-  labels: ["Male", "Female"],
+  labels: ["Pria", "Wanita"],
   colors: ["#435ebe", "#55c6e8"],
   chart: {
     type: "donut",
@@ -80,7 +80,7 @@ let optionsVisitorsProfile = {
 var optionsEurope = {
   series: [
     {
-      name: "series1",
+      name: "Penjualan",
       data: [310, 800, 600, 430, 540, 340, 605, 805, 430, 540, 340, 605],
     },
   ],

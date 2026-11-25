@@ -1,5 +1,13 @@
 let dataTable = new simpleDatatables.DataTable(
-  document.getElementById("table1")
+  document.getElementById("table1"),
+  {
+    labels: {
+      placeholder: "Cari...",
+      perPage: "{select} baris per halaman",
+      noRows: "Tidak ada data yang cocok",
+      info: "Menampilkan {start} sampai {end} dari {rows} data",
+    },
+  }
 )
 // Move "per page dropdown" selector element out of label
 // to make it work with bootstrap 5. Add bs5 classes.
