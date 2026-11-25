@@ -91,7 +91,7 @@
                             </td>
                             <td class="text-nowrap">
                                 <a href="{{ route('items.edit', $item->id) }}"
-                                class="badge bg-warning text-dark text-decoration-none">
+                                class="badge bg-warning text-dark text-decoration-none mb-1">
                                     <i class="bi bi-pencil"></i> Edit
                                 </a>       
                                 @if ($item->is_active == 1)

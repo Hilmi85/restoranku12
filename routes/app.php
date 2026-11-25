@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\MenuController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\CategoryController;
@@ -7,6 +8,7 @@ use App\Http\Controllers\OrderController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\RoleController;
 use App\Http\Controllers\ItemController;
+
 
 // CUSTOMER //
 Route::get('/', function () {
@@ -36,9 +38,7 @@ Route::middleware('role:admin')->group(function () {
 });
 
 Route::middleware('role:admin|cashier|chef')->group(function () {
-    Route::get('/dashboard', function () {
-        return view('admin.dashboard');
-    })->name('dashboard');
+    Route::get('/dashboard',[DashboardController::class, 'index'])->name('dashboard');
     Route::resource('orders', OrderController::class)->only(['index', 'show', 'update']);
     Route::post('/orders/{order}', [OrderController::class, 'updateStatus'])->name('orders.updateStatus');
 });

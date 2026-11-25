@@ -129,14 +129,14 @@
                                     )
                                     <form action="{{ route('orders.updateStatus', $order->id) }}" method="POST">
                                         @csrf
-                                        <button type="submit" class="badge bg-success border-0">
+                                        <button type="submit" class="badge bg-success border-0 mt-1">
                                             <i class="bi bi-check-circle"></i> Terima Pembayaran
                                         </button>
                                     </form>
                                 @elseif(Auth::user()->role?->role_name === 'chef' && $order->status === 'settlement')
                                     <form action="{{ route('orders.updateStatus', $order->id) }}" method="POST">
                                         @csrf
-                                        <button type="submit" class="badge bg-success border-0">
+                                        <button type="submit" class="badge bg-success border-0 mt-1">
                                             <i class="bi bi-check-circle"></i> Pesanan Siap
                                         </button>
                                     </form>
