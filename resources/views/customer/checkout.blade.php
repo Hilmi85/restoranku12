@@ -1,215 +1,214 @@
 @extends('customer.layouts.master')
 
+@section('title', 'Checkout Pesanan')
+
 @section('content')
+    <section class="customer-page-intro">
+        <p class="customer-eyebrow">Langkah terakhir</p>
+        <h1>Konfirmasi pesanan</h1>
+        <p>Lengkapi data pemesan dan pilih metode pembayaran yang paling nyaman.</p>
+    </section>
 
-        <!-- Single Page Header start -->
-        <div class="container-fluid page-header py-5">
-            <h1 class="text-center text-white display-6">Checkout</h1>
-            <ol class="breadcrumb justify-content-center mb-0">
-                <li class="breadcrumb-item active text-primary">Silakan lengkapi form pesanan anda</li>
-            </ol>
-        </div>
-        <!-- Single Page Header End -->
+    @php
+        $subTotal = collect($cart)->sum(fn ($item) => $item['price'] * $item['qty']);
+        $tax = $subTotal * 0.1;
+        $total = $subTotal + $tax;
+    @endphp
 
-    <div class="container-fluid py-5">
-        <div class="container py-5">
-            <h1 class="mb-4">Detail Pembayaran</h1>
-            <form id="checkout-form" action="{{ route('checkout.store') }}" method="POST">
-                @csrf
-                <div class="row g-5">
-                    <div class="col-md-12 col-lg-6 col-xl-6">
-                        <div class="row">
-                            <div class="col-md-12 col-lg-4">
-                                <div class="form-item w-100">
-                                    <label class="form-label my-3">Nama Lengkap<sup>*</sup></label>
-                                    <input type="text" name="fullname" class="form-control" placeholder="Masukkan nama anda" required>
-                                </div>
-                            </div>
-                            <div class="col-md-12 col-lg-4">
-                                <div class="form-item w-100">
-                                    <label class="form-label my-3">Nomor WhatsApp<sup>*</sup></label>
-                                    <input type="text" name="phone" class="form-control" placeholder="Masukkan nomor whatsApp anda" required>
-                                </div>
-                            </div>
-                            <div class="col-md-12 col-lg-4">
-                                <div class="form-item w-100">
-                                    <label class="form-label my-3">Nomor Meja<sup>*</sup></label>
-                                    <input type="text" class="form-control" value="{{ session('tableNumber') ?? 'Tidak ada nomor meja' }}" disabled required>
-                                </div>
-                            </div>
+    <main class="container customer-main-section">
+        @if ($errors->any())
+            <div class="customer-alert is-error" role="alert">{{ $errors->first() }}</div>
+        @endif
+
+        <form id="checkout-form" action="{{ route('checkout.store') }}" method="POST">
+            @csrf
+            <div class="customer-checkout-grid">
+                <div class="customer-panel">
+                    <div class="customer-panel-heading">
+                        <h2>Informasi pemesan</h2>
+                        <p>Data ini digunakan untuk menghubungkan pesanan Anda.</p>
+                    </div>
+
+                    <div class="customer-checkout-fields">
+                        <div class="customer-form-field">
+                            <label for="fullname">Nama lengkap <span>*</span></label>
+                            <input
+                                id="fullname"
+                                type="text"
+                                name="fullname"
+                                class="customer-form-control {{ $errors->has('fullname') ? 'is-invalid' : '' }}"
+                                placeholder="Masukkan nama lengkap"
+                                value="{{ old('fullname') }}"
+                                autocomplete="name"
+                                required
+                            >
+                            @error('fullname') <p class="customer-field-error">{{ $message }}</p> @enderror
                         </div>
-                        <br>
-                        <div class="row">
-                            <div class="col-md-12 col-lg-12">
-                                <div class="form-item">
-                                    <textarea name="note" class="form-control" spellcheck="false" cols="30" rows="5" placeholder="Catatan pesanan (Opsional)"></textarea>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="row">
-                            <div class="table-responsive">
-                                <br><br>
-                                <h4 class="mb-4">Detail Pesanan</h4>
-                                <table class="table">
-                                    <thead>
-                                        <tr>
-                                            <th scope="col">Gambar</th>
-                                            <th scope="col">Menu</th>
-                                            <th scope="col">Harga</th>
-                                            <th scope="col">Jumlah</th>
-                                            <th scope="col">Total</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        @php
-                                            $subTotal = 0;
-                                        @endphp
-                                        @foreach (Session('cart') as $item)
-                                            @php
-                                                $itemTotal = $item['price'] * $item['qty'];
-                                                $subTotal += $itemTotal;
-                                            @endphp
-                                            <tr>
-                                                <th scope="row">
-                                                    <div class="d-flex align-items-center mt-2">
-                                                        <img src="{{ asset('img_item_upload/'. $item['image']) }}"
-                                                        class="img-fluid me-5 rounded-circle"
-                                                        style="width: 80px; height: 80px;"
-                                                        alt=""
-                                                        onerror="this.onerror=null;this.src='{{ $item['image'] }}';">
-                                                    </div>
-                                                </th>
-                                                <td class="py-5">{{ $item['name'] }}</td>
-                                                <td class="py-5">{{ 'Rp'. number_format($item['price'], 0, ',', '.') }}</td>
-                                                <td class="py-5">{{ $item['qty'] }}</td>
-                                                <td class="py-5">{{ 'Rp'. number_format($item['price'] * $item['qty'], 0, ',', '.') }}</td>
-                                            </tr>
-                                    @endforeach
 
-                                    </tbody>
-                                </table>
-                            </div>
+                        <div class="customer-form-field">
+                            <label for="phone">Nomor WhatsApp <span>*</span></label>
+                            <input
+                                id="phone"
+                                type="tel"
+                                name="phone"
+                                class="customer-form-control {{ $errors->has('phone') ? 'is-invalid' : '' }}"
+                                placeholder="Contoh: 081234567890"
+                                value="{{ old('phone') }}"
+                                autocomplete="tel"
+                                required
+                            >
+                            @error('phone') <p class="customer-field-error">{{ $message }}</p> @enderror
+                        </div>
+
+                        <div class="customer-form-field">
+                            <label for="table-number">Nomor meja</label>
+                            <input id="table-number" type="text" class="customer-form-control" value="{{ session('tableNumber') ? 'Meja ' . session('tableNumber') : 'Belum dipilih' }}" disabled>
+                        </div>
+
+                        <div class="customer-form-field is-full">
+                            <label for="note">Catatan pesanan <span class="text-muted fw-normal">(opsional)</span></label>
+                            <textarea id="note" name="note" class="customer-form-control customer-note" placeholder="Contoh: tidak pedas, saus dipisah">{{ old('note') }}</textarea>
                         </div>
                     </div>
 
-                    @php
-                        $tax = $subTotal * 0.1;
-                        $total = $subTotal + $tax;
-                    @endphp
-
-                    <div class="col-md-12 col-lg-6 col-xl-6">
-                        <div class="row g-4 align-items-center py-3">
-                            <div class="col-lg-12">
-                                <div class="bg-light rounded">
-                                    <div class="p-4">
-                                        <h3 class="display-6 mb-4">Total <span class="fw-normal">Pesanan</span></h3>
-                                        <div class="d-flex justify-content-between mb-4">
-                                            <h5 class="mb-0 me-4">Subtotal</h5>
-                                            <p class="mb-0">{{ 'Rp'. number_format($subTotal, 0, ',', '.') }}</p>
-                                        </div>
-                                        <div class="d-flex justify-content-between">
-                                            <p class="mb-0 me-4">Pajak (10%)</p>
-                                            <div class="">
-                                                <p class="mb-0">{{ 'Rp'. number_format($tax, 0, ',', '.') }}</p>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="py-4 mb-4 border-top border-bottom d-flex justify-content-between">
-                                        <h4 class="mb-0 ps-4 me-4">Total</h4>
-                                        <h5 class="mb-0 pe-4">{{ 'Rp'. number_format($total, 0, ',', '.') }}</h5>
-                                    </div>
-
-                                    <div class="py-4 mb-4 d-flex justify-content-between">
-                                        <h5 class="mb-0 ps-4 me-4">Metode Pembayaran</h5>
-                                        <div class="mb-0 pe-4 mb-3 pe-5">
-                                            <div class="form-check">
-                                                <input type="radio" class="form-check-input bg-primary border-0" id="qris" name="payment_method" value="qris">
-                                                <label class="form-check-label" for="qris">QRIS</label>
-                                            </div>
-                                            <div class="form-check">
-                                                <input type="radio" class="form-check-input bg-primary border-0" id="cash" name="payment_method" value="tunai">
-                                                <label class="form-check-label" for="cash">Tunai</label>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-
-                                <div class="d-flex justify-content-end">
-                                    <button type="button" id="pay-button" class="btn border-secondary py-3 text-uppercase text-primary">Konfirmasi Pesanan</button>
-                                </div>
-
-                            </div>
+                    <div class="customer-checkout-items">
+                        <h3>Menu yang dipesan</h3>
+                        <div class="customer-table-wrap">
+                            <table class="table customer-table">
+                                <thead>
+                                    <tr>
+                                        <th scope="col">Menu</th>
+                                        <th scope="col">Harga</th>
+                                        <th scope="col">Jumlah</th>
+                                        <th scope="col">Total</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @foreach ($cart as $item)
+                                        <tr>
+                                            <td>
+                                                <div class="customer-product-cell">
+                                                    <img
+                                                        src="{{ asset('img_item_upload/' . $item['image']) }}"
+                                                        alt="{{ $item['name'] }}"
+                                                        loading="lazy"
+                                                        onerror="this.onerror=null;this.src='{{ $item['image'] }}';"
+                                                    >
+                                                    <div><strong>{{ $item['name'] }}</strong></div>
+                                                </div>
+                                            </td>
+                                            <td>Rp{{ number_format($item['price'], 0, ',', '.') }}</td>
+                                            <td>{{ $item['qty'] }}</td>
+                                            <td><strong>Rp{{ number_format($item['price'] * $item['qty'], 0, ',', '.') }}</strong></td>
+                                        </tr>
+                                    @endforeach
+                                </tbody>
+                            </table>
                         </div>
                     </div>
                 </div>
-            </form>
-        </div>
-    </div>
 
-<script src="https://app.sandbox.midtrans.com/snap/snap.js" data-client-key="{{ env('MIDTRANS_CLIENT_KEY') }}"></script>
+                <aside class="customer-summary customer-checkout-summary">
+                    <h2>Ringkasan pembayaran</h2>
+                    <div class="customer-summary-row"><span>Subtotal</span><strong>Rp{{ number_format($subTotal, 0, ',', '.') }}</strong></div>
+                    <div class="customer-summary-row"><span>Pajak (10%)</span><strong>Rp{{ number_format($tax, 0, ',', '.') }}</strong></div>
+                    <div class="customer-summary-total"><span>Total</span><strong>Rp{{ number_format($total, 0, ',', '.') }}</strong></div>
 
-<script>
-    document.addEventListener('DOMContentLoaded', function () {
-        const payButton = document.getElementById('pay-button');
-        const form = document.querySelector('form');
+                    <div class="customer-payment-methods">
+                        <p class="customer-form-field mb-2"><label>Metode pembayaran <span>*</span></label></p>
+                        <label class="customer-payment-choice" for="qris">
+                            <input type="radio" id="qris" name="payment_method" value="qris" @checked(old('payment_method') === 'qris') required>
+                            <span><strong>QRIS</strong><small>Bayar melalui aplikasi pembayaran digital</small></span>
+                        </label>
+                        <label class="customer-payment-choice" for="cash">
+                            <input type="radio" id="cash" name="payment_method" value="tunai" @checked(old('payment_method') === 'tunai')>
+                            <span><strong>Tunai di kasir</strong><small>Tunjukkan kode pesanan setelah konfirmasi</small></span>
+                        </label>
+                    </div>
 
-        payButton.addEventListener('click', function (e) {
-            e.preventDefault();
+                    <p id="checkout-feedback" class="customer-feedback" role="alert"></p>
+                    <button type="button" id="pay-button" class="customer-primary-button w-100">
+                        <span>Konfirmasi pesanan</span>
+                        <i class="fas fa-arrow-right" aria-hidden="true"></i>
+                    </button>
+                    <p class="small text-muted text-center mt-3 mb-0">Pesanan Anda aman dan tersimpan setelah dikonfirmasi.</p>
+                </aside>
+            </div>
+        </form>
+    </main>
+@endsection
 
-            let paymentMethod = document.querySelector('input[name="payment_method"]:checked');
+@section('script')
+    <script src="https://app.sandbox.midtrans.com/snap/snap.js" data-client-key="{{ config('midtrans.client_key') }}"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            const payButton = document.getElementById('pay-button');
+            const form = document.getElementById('checkout-form');
+            const feedback = document.getElementById('checkout-feedback');
+            const buttonMarkup = payButton.innerHTML;
 
-            if (!paymentMethod) {
-                alert('Choose a payment method to proceed.');
-                return;
-            }
+            payButton.addEventListener('click', async function () {
+                feedback.textContent = '';
 
-            paymentMethod = paymentMethod.value;
-            let formData = new FormData(form);
+                if (!form.reportValidity()) return;
 
-            if (paymentMethod === 'tunai') {
-                form.submit();
-            } else {
-                fetch("{{ route('checkout.store') }}", {
-                    method: 'POST',
-                    body: formData,
-                    headers: {
-                        'X-CSRF-TOKEN': '{{ csrf_token() }}',
-                        'Accept': 'application/json',
+                const paymentMethod = form.querySelector('input[name="payment_method"]:checked');
+                if (!paymentMethod) {
+                    feedback.textContent = 'Pilih metode pembayaran terlebih dahulu.';
+                    return;
+                }
+
+                if (paymentMethod.value === 'tunai') {
+                    form.submit();
+                    return;
+                }
+
+                payButton.disabled = true;
+                payButton.innerHTML = '<span class="spinner-border spinner-border-sm" aria-hidden="true"></span><span>Memproses pembayaran</span>';
+
+                try {
+                    const response = await fetch(form.action, {
+                        method: 'POST',
+                        body: new FormData(form),
+                        headers: {
+                            'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').content,
+                            'Accept': 'application/json',
+                        },
+                    });
+                    const data = await response.json();
+
+                    if (!response.ok || !data.snap_token) {
+                        const validationMessage = data.errors ? Object.values(data.errors).flat()[0] : null;
+                        throw new Error(validationMessage || data.message || 'Pembayaran belum dapat diproses. Silakan coba lagi.');
                     }
-                })
-                .then(response => response.json())
-                .then(data => {
-                    console.log(data);
 
-                    if (data.snap_token) {
-                        snap.pay(data.snap_token, {
-                            gopayMode: 'qr',
-                            onSuccess: function(result){
-                                window.location.href = "/checkout/success/" + data.order_code;
-                            },
-                            onPending: function(result){
-                                alert("Payment pending. Please complete your payment to confirm the order.");
-                            },
-                            onError: function(result){
-                                console.log(result);
-                                alert("Payment failed. Please try again.");
-                            },
-                            onClose: function(){
-                                alert("Payment popup was closed.");
-                            }
-                        });
-                    } else {
-                        alert(data.message ? data.message : "Unexpected response from server. Please try again.");
-                    }
-                })
-                .catch(error => {
-                    console.error('Error:', error);
-                    alert("An error occurred while processing your payment. Please try again.");
-                });
-            }
-
+                    const successUrl = @json(route('checkout.success', ['orderId' => '__ORDER_CODE__']));
+                    window.snap.pay(data.snap_token, {
+                        gopayMode: 'qr',
+                        onSuccess: function () {
+                            window.location.href = successUrl.replace('__ORDER_CODE__', encodeURIComponent(data.order_code));
+                        },
+                        onPending: function () {
+                            window.showCustomerToast('Pembayaran menunggu konfirmasi.', 'error');
+                            payButton.disabled = false;
+                            payButton.innerHTML = buttonMarkup;
+                        },
+                        onError: function () {
+                            window.showCustomerToast('Pembayaran belum berhasil. Silakan coba lagi.', 'error');
+                            payButton.disabled = false;
+                            payButton.innerHTML = buttonMarkup;
+                        },
+                        onClose: function () {
+                            payButton.disabled = false;
+                            payButton.innerHTML = buttonMarkup;
+                        },
+                    });
+                } catch (error) {
+                    feedback.textContent = error.message || 'Terjadi kendala. Silakan coba lagi.';
+                    payButton.disabled = false;
+                    payButton.innerHTML = buttonMarkup;
+                }
+            });
         });
-    });
-</script>
-
+    </script>
 @endsection

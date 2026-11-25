@@ -1,59 +1,69 @@
 @extends('customer.layouts.master')
 
-@section('title', 'Order Success')
+@section('title', 'Pesanan Berhasil')
 
 @section('content')
+    @php
+        $isPaid = in_array(strtolower($order->status ?? ''), ['settlement', 'cooked', 'coocked'], true);
+    @endphp
 
-    <div class="container-fluid py-5 d-flex justify-content-center">
-        <div class="receipt border p-4 bg-white shadow" style="width:450px; margin-top: 5rem;">
-            <h5 class="text-center mb-2"> Ordered Succesfully!</h5>
-            @if ($order->payment_method == 'tunai' && $order->status == 'pending')
-                <p class="text-center"><span class="badge bg-danger">Awaiting your payment</span></p>
-            {{-- @elseif ($order->payment_method == 'qris' && $order->status == 'pending')
-                <p class="text-center"><span class="badge bg-danger">Please scan the QR code below to complete your payment.</span></p> --}}
-            @else
-                <p class="text-center"><span class="badge bg-success">Your order has been confirmed. Thank you for ordering!</span></p>
-            @endif
-            <hr>
-            <h4 class="fw-bold text-center"> Kode bayar: <br><span class="text-primary">{{ $order->order_code }}</span> </h4>
-            <hr>
-            <h5 class="mb-3 text-center">Detail Pesanan</h5>
-            <table class="table table-borderless">
-                <tbody>
-                    @foreach ($orderItems as $orderItem)
-                        <tr>
-                            <td>{{ Str::limit($orderItem->item->name, 25)}} ({{ $orderItem->quantity }})</td>
-                            <td class="text-end">{{ 'Rp'. number_format($orderItem->price, 0, ',', '.') }}</td>
-                        </tr>
-                    @endforeach
-                </tbody>
-            </table>
-            <hr>
-            <table class="table table-borderless">
-                <tbody>
-                    <tr>
-                        <td>Subtotal</td>
-                        <td class="text-end">{{ 'Rp'. number_format($order->subtotal, 0, ',', '.') }}</td>
-                    </tr>
-                    <tr>
-                        <td>Tax (10%)</td>
-                        <td class="text-end">{{ 'Rp'. number_format($order->tax, 0, ',', '.') }}</td>
-                    </tr>
-                    <tr>
-                        <td class="fw-bold">Total</td>
-                        <td class="text-end fw-bold">{{ 'Rp'. number_format($order->grand_total, 0, ',', '.') }}</td>
-                    </tr>
-                </tbody>
-            </table>
-            @if ($order->payment_method == 'tunai')
-                <p class="small text-center">Show this payment code to the cashier
-                    <br>to complete the payment.</p>
-            @elseif ($order->payment_method == 'qris')
-                <p class="small text-center">Payment succesfully completed.</p>
-            @endif
-            <hr>
-            <a href="{{ route('menu') }}" class="btn btn-primary w-100">Back to menu</a>
-        </div>
-    </div>
+    <main class="container customer-success-wrap">
+        <article class="customer-receipt">
+            <header class="customer-receipt-head">
+                <span class="customer-receipt-icon" aria-hidden="true">
+                    <i class="fas {{ $isPaid ? 'fa-check' : 'fa-receipt' }}"></i>
+                </span>
+                <p>Restoranku · Rincian pesanan</p>
+                <h1>{{ $isPaid ? 'Pembayaran diterima' : 'Pesanan berhasil dibuat' }}</h1>
+                @if ($isPaid)
+                    <span class="customer-status-pill is-paid"><i class="fas fa-check-circle" aria-hidden="true"></i> Pembayaran berhasil</span>
+                @elseif ($order->payment_method === 'tunai')
+                    <span class="customer-status-pill"><i class="fas fa-wallet" aria-hidden="true"></i> Bayar di kasir</span>
+                @else
+                    <span class="customer-status-pill"><i class="fas fa-clock" aria-hidden="true"></i> Menunggu konfirmasi pembayaran</span>
+                @endif
+            </header>
 
+            <div class="customer-receipt-body">
+                <div class="customer-order-code">
+                    <span>Kode pesanan</span>
+                    <strong>{{ $order->order_code }}</strong>
+                </div>
+
+                <div class="d-flex justify-content-between gap-3 mb-3 small text-muted">
+                    <span>Meja {{ $order->table_number }}</span>
+                    <span>{{ $order->payment_method === 'qris' ? 'QRIS' : 'Tunai' }}</span>
+                </div>
+
+                <table class="customer-receipt-lines">
+                    <tbody>
+                        @foreach ($orderItems as $orderItem)
+                            <tr>
+                                <td>{{ $orderItem->item?->name ?? 'Menu' }} <span class="text-muted">× {{ $orderItem->quantity }}</span></td>
+                                <td>Rp{{ number_format($orderItem->price, 0, ',', '.') }}</td>
+                            </tr>
+                        @endforeach
+                    </tbody>
+                </table>
+
+                <table class="customer-receipt-lines">
+                    <tbody>
+                        <tr><td>Subtotal</td><td>Rp{{ number_format($order->subtotal, 0, ',', '.') }}</td></tr>
+                        <tr><td>Pajak (10%)</td><td>Rp{{ number_format($order->tax, 0, ',', '.') }}</td></tr>
+                        <tr class="customer-line-total"><td>Total pembayaran</td><td>Rp{{ number_format($order->grand_total, 0, ',', '.') }}</td></tr>
+                    </tbody>
+                </table>
+
+                @if ($order->payment_method === 'tunai' && !$isPaid)
+                    <p class="customer-receipt-note">Tunjukkan kode pesanan ini kepada kasir untuk menyelesaikan pembayaran.</p>
+                @elseif (!$isPaid)
+                    <p class="customer-receipt-note">Pembayaran QRIS Anda sedang menunggu konfirmasi. Simpan kode pesanan ini.</p>
+                @endif
+
+                <a href="{{ route('menu') }}" class="customer-primary-button w-100">
+                    Kembali ke menu <i class="fas fa-arrow-right" aria-hidden="true"></i>
+                </a>
+            </div>
+        </article>
+    </main>
 @endsection

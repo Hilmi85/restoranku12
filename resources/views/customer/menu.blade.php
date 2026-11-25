@@ -1,95 +1,71 @@
 @extends('customer.layouts.master')
 
+@section('title', 'Menu Restoranku')
+
 @section('content')
-
-        <!-- Single Page Header start -->
-        <div class="container-fluid page-header py-5">
-            <h1 class="text-center text-white display-6">Menu</h1>
-            <ol class="breadcrumb justify-content-center mb-0">
-                <li class="breadcrumb-item active text-primary">Silakan pilih menu favorit anda</li>
-            </ol>
+    <section class="customer-page-intro">
+        <p class="customer-eyebrow">Dibuat dengan sepenuh hati</p>
+        <h1>Temukan menu favoritmu</h1>
+        <p>Pilihan hidangan lezat untuk menemani momen makan Anda. Pilih menu, lalu tambahkan ke keranjang.</p>
+        <div class="customer-intro-count" aria-label="{{ $items->count() }} menu tersedia">
+            <div><strong>{{ $items->count() }}</strong><span>menu tersedia</span></div>
         </div>
-        <!-- Single Page Header End -->
+    </section>
 
-        <!-- Fruits Shop Start-->
-        <div class="container-fluid fruite py-5">
-            <div class="container py-5">
-                <div class="row g-4">
-                    <div class="col-lg-12">
-                        <div class="row g-3">
-                            <div class="col-lg">
-                                <div class="row g-4 justify-content-center">
+    <main class="container customer-main-section">
+        <div class="customer-section-heading">
+            <div>
+                <h2>Menu pilihan</h2>
+                <p>Pesanan Anda disiapkan setelah dikonfirmasi.</p>
+            </div>
+            <a href="{{ route('cart') }}" class="customer-secondary-button">
+                <i class="fas fa-shopping-bag" aria-hidden="true"></i> Lihat keranjang
+            </a>
+        </div>
 
-                                    @foreach ($items as $item)
-                                    <div class="col-md-6 col-lg-6 col-xl-4">
-                                        <div class="rounded position-relative fruite-item">
-                                            <div class="fruite-img">
-                                                <img src="{{ asset('img_item_upload/'. $item->img) }}" class="img-fluid w-100 rounded-top" alt="" onerror="this.onerror=null;this.src='{{ $item->img }}';">
-                                            </div>
-                                            <div class="text-white bg-secondary px-3 py-1 rounded position-absolute
-                                                @if ($item->category->cat_name == 'Makanan')
-                                                bg-warning
-                                                @elseif ($item->category->cat_name == 'Minuman')
-                                                bg-info
-                                                @else
-                                                bg-secondary
-                                                @endif" style="top: 10px; left: 10px;">
-                                                {{ $item->category->cat_name }}
-                                            </div>
-                                            <div class="p-4 border border-secondary border-top-0 rounded-bottom">
-                                                <h4>{{ $item->name }}</h4>
-                                                <p class="text-limited">{{ $item->description }}</p>
-                                                <div class="d-flex justify-content-between flex-lg-wrap">
-                                                    <p class="text-dark fs-5 fw-bold mb-0">{{ 'Rp'. number_format($item->price, 0, ',', '.') }}</p>
-                                                    <a href="#" onClick="addToCart({{ $item->id }})" class="btn border border-secondary rounded-pill px-3 text-primary"><i class="fa fa-shopping-bag me-2 text-primary"></i> Tambah Keranjang</a>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    @endforeach
-
-                                    <!-- Pagination -->
-                                    <!-- <div class="col-12">
-                                        <div class="pagination d-flex justify-content-center mt-5">
-                                            <a href="#" class="rounded">&laquo;</a>
-                                            <a href="#" class="active rounded">1</a>
-                                            <a href="#" class="rounded">2</a>
-                                            <a href="#" class="rounded">3</a>
-                                            <a href="#" class="rounded">4</a>
-                                            <a href="#" class="rounded">5</a>
-                                            <a href="#" class="rounded">6</a>
-                                            <a href="#" class="rounded">&raquo;</a>
-                                        </div>
-                                    </div> -->
-                                </div>
+        <div class="row g-4">
+            @forelse ($items as $item)
+            @csrf
+                @php
+                    $categoryName = $item->category?->cat_name ?? 'Pilihan restoran';
+                @endphp
+                <div class="col-12 col-sm-6 col-xl-4">
+                    <article class="customer-menu-card">
+                        <div class="customer-menu-image">
+                            <img
+                                src="{{ asset('img_item_upload/' . $item->img) }}"
+                                alt="{{ $item->name }}"
+                                loading="lazy"
+                                onerror="this.onerror=null;this.src='{{ $item->img }}';"
+                            >
+                            <span class="customer-menu-category">{{ $categoryName }}</span>
+                        </div>
+                        <div class="customer-menu-body">
+                            <h3>{{ $item->name }}</h3>
+                            <p class="customer-menu-description">{{ $item->description ?: 'Disiapkan segar untuk menemani waktu makan Anda.' }}</p>
+                            <div class="customer-menu-bottom">
+                                <span class="customer-menu-price">Rp{{ number_format($item->price, 0, ',', '.') }}</span>
+                                <button
+                                    type="button"
+                                    class="customer-add-button"
+                                    data-add-to-cart="{{ $item->id }}"
+                                    data-add-url="{{ route('cart.add') }}"
+                                >
+                                    <i class="fas fa-plus" aria-hidden="true"></i> Tambah ke keranjang
+                                </button>
                             </div>
                         </div>
+                    </article>
+                </div>
+            @empty
+                <div class="col-12">
+                    <div class="customer-empty-state">
+                        <span class="customer-empty-icon"><i class="fas fa-utensils" aria-hidden="true"></i></span>
+                        <h2>Menu belum tersedia</h2>
+                        <p>Silakan kembali lagi nanti untuk melihat pilihan hidangan dari Restoranku.</p>
                     </div>
                 </div>
-            </div>
+            @endforelse
         </div>
-        <!-- Fruits Shop End-->
-
-@endsection
-
-@section('script')
-    <script>
-        function addToCart(menuId) {
-            fetch("{{ route('cart.add') }}", {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                    'X-CSRF-TOKEN': '{{ csrf_token() }}'
-                },
-                body: JSON.stringify({ id: menuId })
-            })
-            .then(response => response.json())
-            .then(data => {
-                alert(data.message);
-            })
-            .catch(error => {
-                console.error('Error:', error);
-            });
-        }
-    </script>
+    </main>
 @endsection

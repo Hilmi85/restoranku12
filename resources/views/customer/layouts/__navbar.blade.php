@@ -1,23 +1,38 @@
-        <div class="container-fluid fixed-top">
-            <div class="container px-0">
-                <nav class="navbar navbar-light bg-white navbar-expand-xl">
-                    <a href="#" class="navbar-brand"><h1 class="text-primary display-6">Restoranku</h1></a>
-                    <button class="navbar-toggler py-2 px-3" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse">
-                        <span class="fa fa-bars text-primary"></span>
-                    </button>
-                    <div class="collapse navbar-collapse bg-white" id="navbarCollapse">
-                        <div class="navbar-nav mx-auto">
-                            <a href="#" class="nav-item nav-link">Home</a>
-                            <a href="/" class="nav-item nav-link active">Menu</a>
-                            <a href="#" class="nav-item nav-link">Kontak</a>
-                        </div>
-                        <div class="d-flex m-3 me-0">
-                            <a href="{{ route('cart') }}" class="position-relative me-4 my-auto">
-                                <i class="fa fa-shopping-bag fa-2x"></i>
-                            </a>
-                        </div>
-                    </div>
-                </nav>
+@php
+    $cartCount = collect(session('cart', []))->sum('qty');
+@endphp
+
+<header class="customer-navbar-shell sticky-top">
+    <nav class="navbar navbar-expand-lg customer-navbar">
+        <div class="container">
+            <a href="{{ route('menu') }}" class="customer-brand" aria-label="Restoranku, lihat menu">
+                <span class="customer-brand-mark" aria-hidden="true">R</span>
+                <span class="customer-brand-copy">
+                    <strong>Restoranku</strong>
+                    <small>MENU &amp; PEMESANAN</small>
+                </span>
+            </a>
+
+            <button class="navbar-toggler customer-nav-toggle" type="button" data-bs-toggle="collapse" data-bs-target="#customerNavigation" aria-controls="customerNavigation" aria-expanded="false" aria-label="Buka navigasi">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+
+            <div class="collapse navbar-collapse" id="customerNavigation">
+                <div class="navbar-nav customer-nav-links ms-auto me-lg-4">
+                    <a href="{{ route('menu') }}" class="nav-link {{ request()->routeIs('menu') ? 'active' : '' }}">Menu</a>
+                </div>
+
+                <div class="customer-nav-actions">
+                    @if (session('tableNumber'))
+                        <span class="customer-table-pill"><i class="fas fa-chair" aria-hidden="true"></i> Meja {{ session('tableNumber') }}</span>
+                    @endif
+                    <a href="{{ route('cart') }}" class="customer-cart-link" aria-label="Buka keranjang, {{ $cartCount }} item">
+                        <i class="fas fa-shopping-bag" aria-hidden="true"></i>
+                        <span>Keranjang</span>
+                        <span class="customer-cart-count" data-cart-count>{{ $cartCount }}</span>
+                    </a>
+                </div>
             </div>
         </div>
-
+    </nav>
+</header>

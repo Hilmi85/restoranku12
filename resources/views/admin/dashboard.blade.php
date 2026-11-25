@@ -1,5 +1,5 @@
 @extends('admin.layouts.master')
-@section('title', 'Category')
+@section('title', 'Dashboard')
 
 @section('css')
 @endsection
@@ -84,11 +84,28 @@
                 <div class="row">
                     <div class="col-12">
                         <div class="card">
-                            <div class="card-header">
-                                <h4>Grafik Penjualan</h4>
+                            <div class="card-header d-flex flex-wrap align-items-center justify-content-between gap-3">
+                                <div>
+                                    <h4 class="mb-1">Grafik Penjualan</h4>
+                                    <p class="text-muted mb-0">{{ $salesChartSubtitle }}</p>
+                                </div>
+                                <form action="{{ route('dashboard') }}" method="GET" class="d-flex align-items-center gap-2">
+                                    <label for="sales-period" class="text-muted mb-0">Periode</label>
+                                    <select id="sales-period" name="period" class="form-select form-select-sm" aria-label="Pilih periode grafik">
+                                        <option value="day" @selected($salesPeriod === 'day')>Per Hari</option>
+                                        <option value="month" @selected($salesPeriod === 'month')>Per Bulan</option>
+                                        <option value="year" @selected($salesPeriod === 'year')>Per Tahun</option>
+                                    </select>
+                                    <button type="submit" class="btn btn-primary btn-sm">Terapkan</button>
+                                </form>
                             </div>
                             <div class="card-body">
-                                <div id="chart-profile-visit"></div>
+                                <div
+                                    id="chart-profile-visit"
+                                    data-labels='@json($salesChartLabels)'
+                                    data-values='@json($salesChartValues)'
+                                    aria-label="Grafik penjualan bulanan"
+                                    role="img"></div>
                             </div>
                         </div>
                     </div>

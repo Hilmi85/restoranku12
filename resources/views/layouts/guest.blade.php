@@ -312,7 +312,7 @@
                 {{ $slot }}
 
                 <div class="auth-panel-footer">
-                    © {{ date('Y') }} Restoranku
+                    &copy; {{ date('Y') }} Restoranku · Dibuat oleh Ilham Hilmi Hilmawan
                     <a href="{{ route('menu') }}">Kembali ke halaman utama</a>
                 </div>
             </div>

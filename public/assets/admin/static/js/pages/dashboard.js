@@ -1,3 +1,11 @@
+const profileVisitElement = document.querySelector("#chart-profile-visit");
+const profileVisitLabels = profileVisitElement
+  ? JSON.parse(profileVisitElement.dataset.labels || "[]")
+  : [];
+const profileVisitValues = profileVisitElement
+  ? JSON.parse(profileVisitElement.dataset.values || "[]")
+  : [];
+
 var optionsProfileVisit = {
   annotations: {
     position: "back",
@@ -7,34 +15,45 @@ var optionsProfileVisit = {
   },
   chart: {
     type: "bar",
-    height: 300,
+    height: 320,
+    toolbar: { show: false },
+    fontFamily: "inherit",
   },
   fill: {
     opacity: 1,
   },
-  plotOptions: {},
+  plotOptions: {
+    bar: {
+      borderRadius: 7,
+      columnWidth: "46%",
+    },
+  },
   series: [
     {
-      name: "sales",
-      data: [9, 20, 30, 20, 10, 20, 30, 20, 10, 20, 30, 20],
+      name: "Penjualan",
+      data: profileVisitValues,
     },
   ],
-  colors: "#435ebe",
+  colors: ["#435ebe"],
   xaxis: {
-    categories: [
-      "Jan",
-      "Feb",
-      "Mar",
-      "Apr",
-      "May",
-      "Jun",
-      "Jul",
-      "Aug",
-      "Sep",
-      "Oct",
-      "Nov",
-      "Dec",
-    ],
+    categories: profileVisitLabels,
+    axisBorder: { show: false },
+    axisTicks: { show: false },
+  },
+  yaxis: {
+    min: 0,
+    labels: {
+      formatter: (value) => `Rp ${new Intl.NumberFormat("id-ID", { notation: "compact", maximumFractionDigits: 1 }).format(value)}`,
+    },
+  },
+  tooltip: {
+    y: {
+      formatter: (value) => `Rp ${new Intl.NumberFormat("id-ID").format(value)}`,
+    },
+  },
+  grid: {
+    borderColor: "#eef0f4",
+    strokeDashArray: 4,
   },
 }
 let optionsVisitorsProfile = {
@@ -134,34 +153,17 @@ let optionsIndonesia = {
   colors: ["#dc3545"],
 }
 
-var chartProfileVisit = new ApexCharts(
-  document.querySelector("#chart-profile-visit"),
-  optionsProfileVisit
-)
-var chartVisitorsProfile = new ApexCharts(
-  document.getElementById("chart-visitors-profile"),
-  optionsVisitorsProfile
-)
-var chartEurope = new ApexCharts(
-  document.querySelector("#chart-europe"),
-  optionsEurope
-)
-var chartAmerica = new ApexCharts(
-  document.querySelector("#chart-america"),
-  optionsAmerica
-)
-var chartIndia = new ApexCharts(
-  document.querySelector("#chart-india"),
-  optionsIndia
-)
-var chartIndonesia = new ApexCharts(
-  document.querySelector("#chart-indonesia"),
-  optionsIndonesia
-)
+const renderChart = (selector, options) => {
+  const element = document.querySelector(selector)
 
-chartIndonesia.render()
-chartAmerica.render()
-chartIndia.render()
-chartEurope.render()
-chartProfileVisit.render()
-chartVisitorsProfile.render()
+  if (element) {
+    new ApexCharts(element, options).render()
+  }
+}
+
+renderChart("#chart-indonesia", optionsIndonesia)
+renderChart("#chart-america", optionsAmerica)
+renderChart("#chart-india", optionsIndia)
+renderChart("#chart-europe", optionsEurope)
+renderChart("#chart-profile-visit", optionsProfileVisit)
+renderChart("#chart-visitors-profile", optionsVisitorsProfile)
