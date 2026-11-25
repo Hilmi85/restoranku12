@@ -45,6 +45,6 @@ class OrderController extends Controller
         }
         $order->save();
 
-        return redirect()->route('orders.index')->with('success', 'Pembayaran Berhasil Diterima.');
+        return redirect()->route('orders.index')->with('success', 'Status berhasil diperbarui.');
     }
 }
